@@ -1,3 +1,7 @@
+using RccgWeb.Data;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+
 namespace RccgWeb
 {
     public class Program
@@ -8,6 +12,11 @@ namespace RccgWeb
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("RccgConnectionStrings"));
+            }
+           );
 
             var app = builder.Build();
 
