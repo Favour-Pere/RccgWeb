@@ -12,6 +12,6 @@ namespace RccgWeb.DTO
 
         public string ChurchLocation { get; set; } = church.ChurchLocation;
 
-        public ChurchType ChurchType { get; set; } = church.ChurchType;
+        
     }
 }

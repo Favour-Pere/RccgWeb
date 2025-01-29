@@ -8,7 +8,5 @@ namespace RccgWeb.Services.Interfaces
         public Task<UserDto> GetUserDetails();
 
         public Task<PastorDto> GetPastor();
-
-        public Task<IActionResult>
     }
 }
