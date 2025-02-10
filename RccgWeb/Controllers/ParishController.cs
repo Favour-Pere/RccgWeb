@@ -29,7 +29,7 @@ namespace RccgWeb.Controllers
             var newParish = new Parish
             {
                 ParishId = Guid.NewGuid(),
-                ChurchId = ChurchIdGenerator.GenerateChurchId(_context.Parishes),
+                ChurchId = ChurchIdGenerator.GenerateChurchId(_context),
                 ParishName = "Test Parish",
                 ParishPastor = "Pastor Parish",
                 DateCreated = DateTime.Now,

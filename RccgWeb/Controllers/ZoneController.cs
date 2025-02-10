@@ -22,7 +22,7 @@ namespace RccgWeb.Controllers
             var newZone = new Zone
             {
                 ZoneId = Guid.NewGuid(),
-                ChurchId = ChurchIdGenerator.GenerateChurchId(_context.Zones),
+                ChurchId = ChurchIdGenerator.GenerateChurchId(_context),
                 ZoneName = "Auto Zone",
                 ZonePastor = "Pastor Auto",
                 DateCreated = DateTime.Now,

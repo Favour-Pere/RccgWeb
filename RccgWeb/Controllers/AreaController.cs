@@ -29,7 +29,7 @@ namespace RccgWeb.Controllers
             var newArea = new Area
             {
                 AreaId = Guid.NewGuid(),
-                ChurchId = ChurchIdGenerator.GenerateChurchId(_context.Areas),
+                ChurchId = ChurchIdGenerator.GenerateChurchId(_context),
                 AreaName = "Test Area",
                 AreaPastor = "Test Pastor",
                 DateCreated = DateTime.Now,
