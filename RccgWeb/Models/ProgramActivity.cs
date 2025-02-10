@@ -8,11 +8,13 @@ namespace RccgWeb.Models
         [Key]
         public Guid ProgramActivityId { get; set; }
 
+        [Required]
         public string ActivityName { get; set; }
 
+        [Required]
         public string ActivityDescription { get; set; }
 
-        public DateOnly DateCreated { get; set; }
+        public DateTime DateCreated { get; set; }
 
         public DateTime DateTimeSubmitted { get; set; } = DateTime.Now;
 
@@ -26,8 +28,10 @@ namespace RccgWeb.Models
 
         public int ActiveWorkers { get; set; }
 
+        [Required]
         public string PastorInCharge { get; set; }
 
+        [Required]
         public string ChurchId { get; set; }
 
         [ForeignKey("Zone")]
