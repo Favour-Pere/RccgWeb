@@ -5,24 +5,21 @@ namespace RccgWeb
 {
     public static class ChurchIdGenerator
     {
-        public static string GenerateChurchId<T>(ApplicationDbContext context, string prefix = "rccg-04-") where T : class
+        public static string GenerateChurchId(ApplicationDbContext context)
         {
-            var lastChurchId = context.Set<T>().OrderByDescending(e => EF.Property<string>(e, "ChurchId"))
-                .Select(e => EF.Property<string>(e, "ChurchId")).FirstOrDefault();
-
-            int nextNumber = 1;
-
-            if (!string.IsNullOrEmpty(lastChurchId) && lastChurchId.StartsWith(prefix))
+            var lastChurchId = context.Zones.Select(z => z.ChurchId)
+                                      .Union(context.Areas.Select(a => a.ChurchId))
+                                      .Union(context.Parishes.Select(p => p.ChurchId))
+                                      .OrderByDescending(id => id)
+                                      .FirstOrDefault();
+            if (lastChurchId == null)
             {
-                string numberPart = lastChurchId.Replace(prefix, "");
-
-                if (int.TryParse(numberPart, out int lastNumber))
-                {
-                    nextNumber = lastNumber + 1;
-                }
+                return "rccg-04-0001";
             }
 
-            return $"{prefix}{nextNumber:D4}";
+            var lastNumber = int.Parse(lastChurchId.Split('-').Last());
+
+            return $"rccg-04-{(lastNumber + 1).ToString("D4")}";
         }
     }
 }

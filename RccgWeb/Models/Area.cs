@@ -1,6 +1,7 @@
 ﻿using RccgWeb.Data;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace RccgWeb.Models
 {
@@ -30,16 +31,9 @@ namespace RccgWeb.Models
         [ForeignKey("Zone")]
         public Guid ZoneId { get; set; }
 
+        [JsonIgnore]
         public Zone Zone { get; set; }
 
         public ICollection<Parish> Parishes { get; set; }
-
-        public void GenerateChurchId(ApplicationDbContext context)
-        {
-            if (string.IsNullOrEmpty(ChurchId))
-            {
-                ChurchId = ChurchIdGenerator.GenerateChurchId<Area>(context);
-            }
-        }
     }
 }

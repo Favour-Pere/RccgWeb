@@ -1,4 +1,5 @@
 ﻿using RccgWeb.Data;
+using System.Text.Json.Serialization;
 
 namespace RccgWeb.Models
 {
@@ -18,14 +19,9 @@ namespace RccgWeb.Models
 
         public Guid AreaId { get; set; }
 
+        [JsonIgnore]
         public Area Area { get; set; }
 
-        public void GenerateChurchId(ApplicationDbContext context)
-        {
-            if (string.IsNullOrEmpty(ChurchId))
-            {
-                ChurchId = ChurchIdGenerator.GenerateChurchId<Parish>(context);
-            }
-        }
+        public ICollection<ProgramActivity> ProgramActivities { get; set; }
     }
 }

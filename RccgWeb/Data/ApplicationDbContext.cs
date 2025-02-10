@@ -12,9 +12,29 @@ namespace RccgWeb.Data
 
         public DbSet<Parish> Parishes { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder builder)
+        public DbSet<ProgramActivity> Activities { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(builder);
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<ProgramActivity>()
+           .HasOne(a => a.Zone)
+           .WithMany() // No navigation back from Zone to Activity
+           .HasForeignKey(a => a.ZoneId)
+           .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ProgramActivity>()
+                .HasOne(a => a.Area)
+                .WithMany() // No navigation back from Area to Activity
+                .HasForeignKey(a => a.AreaId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ProgramActivity>()
+                .HasOne(a => a.Parish)
+                .WithMany(p => p.ProgramActivities)  // Navigation property in Parish
+                .HasForeignKey(a => a.ParishId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
         public override int SaveChanges()
@@ -32,7 +52,8 @@ namespace RccgWeb.Data
                 var churchIdProperty = entry.Entity.GetType().GetProperty("ChurchId");
                 if (churchIdProperty != null && churchIdProperty.GetValue(entry.Entity) == null)
                 {
-                    var generatedId = ChurchIdGenerator.GenerateChurchId<T>(this);
+                    var generatedId = ChurchIdGenerator.GenerateChurchId(this);
+
                     churchIdProperty.SetValue(entry.Entity, generatedId);
                 }
             }

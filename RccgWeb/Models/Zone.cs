@@ -17,13 +17,5 @@ namespace RccgWeb.Models
         public string Location { get; set; }
 
         public ICollection<Area> Areas { get; set; }
-
-        public void GenerateChurchId(ApplicationDbContext context)
-        {
-            if (string.IsNullOrEmpty(ChurchId))
-            {
-                ChurchId = ChurchIdGenerator.GenerateChurchId<Zone>(context);
-            }
-        }
     }
 }
