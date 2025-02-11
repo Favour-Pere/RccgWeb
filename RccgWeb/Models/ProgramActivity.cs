@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -32,25 +33,25 @@ namespace RccgWeb.Models
         [Required]
         public string PastorInCharge { get; set; }
 
-        [Required]
-        public string ChurchId { get; set; }
+        [BindProperty]
+        public string? ChurchId { get; set; }
 
         [ForeignKey("Zone")]
         public Guid? ZoneId { get; set; }
 
         [JsonIgnore]
-        public Zone Zone { get; set; }
+        public Zone? Zone { get; set; }
 
         [ForeignKey("Area")]
         public Guid? AreaId { get; set; }
 
         [JsonIgnore]
-        public Area Area { get; set; }
+        public Area? Area { get; set; }
 
         [ForeignKey("Parish")]
         public Guid? ParishId { get; set; }
 
         [JsonIgnore]
-        public Parish Parish { get; set; }
+        public Parish? Parish { get; set; }
     }
 }

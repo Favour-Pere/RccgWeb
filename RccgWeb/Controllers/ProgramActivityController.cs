@@ -46,15 +46,23 @@ namespace RccgWeb.Controllers
 
                 if (programActivity.ZoneId.HasValue)
                 {
-                    programActivity.ChurchId = _context.Zones.Where(z => z.ZoneId == programActivity.ZoneId).Select(z => z.ChurchId).FirstOrDefault();
+                    var zone = await _context.Zones.FindAsync(programActivity.ZoneId);
+                    programActivity.ChurchId = zone?.ChurchId;
+
+                    //programActivity.ChurchId = _context.Zones.Where(z => z.ZoneId == programActivity.ZoneId).Select(z => z.ChurchId).FirstOrDefault();
                 }
                 else if (programActivity.AreaId.HasValue)
                 {
-                    programActivity.ChurchId = _context.Areas.Where(a => a.AreaId == programActivity.AreaId).Select(a => a.ChurchId).FirstOrDefault();
+                    var area = await _context.Areas.FindAsync(programActivity.AreaId);
+                    programActivity.ChurchId = area?.ChurchId;
+                    //programActivity.ChurchId = _context.Areas.Where(a => a.AreaId == programActivity.AreaId).Select(a => a.ChurchId).FirstOrDefault();
                 }
                 else if (programActivity.ParishId.HasValue)
                 {
-                    programActivity.ChurchId = _context.Parishes.Where(p => p.ParishId == programActivity.ParishId).Select(p => p.ChurchId).FirstOrDefault();
+
+                    var parish = await _context.Parishes.FindAsync(programActivity.ParishId);
+                    programActivity.ChurchId = parish?.ChurchId;
+                    //programActivity.ChurchId = _context.Parishes.Where(p => p.ParishId == programActivity.ParishId).Select(p => p.ChurchId).FirstOrDefault();
                 }
 
                 if (string.IsNullOrEmpty(programActivity.ChurchId))
@@ -71,7 +79,7 @@ namespace RccgWeb.Controllers
                 }
 
                 _context.Activities.Add(programActivity);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
                 return Ok(new
                 {
