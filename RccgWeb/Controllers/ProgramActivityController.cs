@@ -46,8 +46,47 @@ namespace RccgWeb.Controllers
 
                 if (programActivity.ZoneId.HasValue)
                 {
-                    programActivity.ChurchId = _context.Zones.Where
+                    programActivity.ChurchId = _context.Zones.Where(z => z.ZoneId == programActivity.ZoneId).Select(z => z.ChurchId).FirstOrDefault();
                 }
+                else if (programActivity.AreaId.HasValue)
+                {
+                    programActivity.ChurchId = _context.Areas.Where(a => a.AreaId == programActivity.AreaId).Select(a => a.ChurchId).FirstOrDefault();
+                }
+                else if (programActivity.ParishId.HasValue)
+                {
+                    programActivity.ChurchId = _context.Parishes.Where(p => p.ParishId == programActivity.ParishId).Select(p => p.ChurchId).FirstOrDefault();
+                }
+
+                if (string.IsNullOrEmpty(programActivity.ChurchId))
+                {
+                    return BadRequest(new
+                    {
+                        message = "Invalid ZoneId, AreaId, or ParishId. ChurchId could not be determined."
+                    });
+                }
+
+                if (programActivity.DateCreated == default)
+                {
+                    programActivity.DateCreated = DateTime.Now;
+                }
+
+                _context.Activities.Add(programActivity);
+                _context.SaveChanges();
+
+                return Ok(new
+                {
+                    message = "Program activity added successfully",
+                    data = programActivity
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    message = "An error occured while adding the activity",
+
+                    error = ex.Message.ToString()
+                });
             }
         }
     }
