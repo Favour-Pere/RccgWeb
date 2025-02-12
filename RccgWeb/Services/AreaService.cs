@@ -14,9 +14,15 @@ namespace RccgWeb.Services
             _context = context;
         }
 
-        public Task AddAreaAsync(Area area)
+        public async Task AddAreaAsync(Area area)
         {
-            throw new NotImplementedException();
+            if (area == null)
+            {
+                throw new ArgumentNullException(nameof(area));
+            }
+
+            await _context.Areas.AddAsync(area);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<Area> GetAreaByIdAsync(Guid areaId)
