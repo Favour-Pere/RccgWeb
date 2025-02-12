@@ -18,23 +18,7 @@ namespace RccgWeb.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<ProgramActivity>()
-           .HasOne(a => a.Zone)
-           .WithMany() // No navigation back from Zone to Activity
-           .HasForeignKey(a => a.ZoneId)
-           .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<ProgramActivity>()
-                .HasOne(a => a.Area)
-                .WithMany() // No navigation back from Area to Activity
-                .HasForeignKey(a => a.AreaId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<ProgramActivity>()
-                .HasOne(a => a.Parish)
-                .WithMany(p => p.ProgramActivities)  // Navigation property in Parish
-                .HasForeignKey(a => a.ParishId)
-                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<ProgramActivity>().Property(a => a.ChurchId).IsRequired();  // Ensure ChurchId is required
         }
 
         public override int SaveChanges()

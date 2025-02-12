@@ -21,7 +21,5 @@ namespace RccgWeb.Models
 
         [JsonIgnore]
         public Area Area { get; set; }
-
-        public ICollection<ProgramActivity> ProgramActivities { get; set; }
     }
 }

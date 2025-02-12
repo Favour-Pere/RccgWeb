@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using RccgWeb.Data;
 using RccgWeb.Models;
 
@@ -19,60 +20,24 @@ namespace RccgWeb.Controllers
         [HttpPost("AddActivity")]
         public async Task<IActionResult> AddActivity([FromBody] ProgramActivity programActivity)
         {
-            if (programActivity == null)
+            if (programActivity == null || string.IsNullOrEmpty(programActivity.ChurchId))
             {
-                return BadRequest(new
-                {
-                    message = "Invalid activity data"
-                });
+                return BadRequest(new { message = "Invalid activity data. ChurchId is required." });
             }
 
             try
             {
-                int idCount = new[]
-                {
-                    programActivity.ZoneId,
-                    programActivity.AreaId,
-                    programActivity.ParishId
-                }.Count(id => id.HasValue);
+                // Check for existing Zone, Area, or Parish with the given ChurchId
+                var existingChurch = await _context.Zones.AsNoTracking().FirstOrDefaultAsync(z => z.ChurchId == programActivity.ChurchId)
+                                  ?? (object)await _context.Areas.AsNoTracking().FirstOrDefaultAsync(a => a.ChurchId == programActivity.ChurchId)
+                                  ?? (object)await _context.Parishes.AsNoTracking().FirstOrDefaultAsync(p => p.ChurchId == programActivity.ChurchId);
 
-                if (idCount != 1)
+                if (existingChurch == null)
                 {
-                    return BadRequest(new
-                    {
-                        message = "Program Activity must be linked to one of zone, Area, or parish."
-                    });
+                    return NotFound(new { message = "No Zone, Area, or Parish found for the provided ChurchId." });
                 }
 
-                if (programActivity.ZoneId.HasValue)
-                {
-                    var zone = await _context.Zones.FindAsync(programActivity.ZoneId);
-                    programActivity.ChurchId = zone?.ChurchId;
-
-                    //programActivity.ChurchId = _context.Zones.Where(z => z.ZoneId == programActivity.ZoneId).Select(z => z.ChurchId).FirstOrDefault();
-                }
-                else if (programActivity.AreaId.HasValue)
-                {
-                    var area = await _context.Areas.FindAsync(programActivity.AreaId);
-                    programActivity.ChurchId = area?.ChurchId;
-                    //programActivity.ChurchId = _context.Areas.Where(a => a.AreaId == programActivity.AreaId).Select(a => a.ChurchId).FirstOrDefault();
-                }
-                else if (programActivity.ParishId.HasValue)
-                {
-
-                    var parish = await _context.Parishes.FindAsync(programActivity.ParishId);
-                    programActivity.ChurchId = parish?.ChurchId;
-                    //programActivity.ChurchId = _context.Parishes.Where(p => p.ParishId == programActivity.ParishId).Select(p => p.ChurchId).FirstOrDefault();
-                }
-
-                if (string.IsNullOrEmpty(programActivity.ChurchId))
-                {
-                    return BadRequest(new
-                    {
-                        message = "Invalid ZoneId, AreaId, or ParishId. ChurchId could not be determined."
-                    });
-                }
-
+                // Ensure DateCreated is properly set
                 if (programActivity.DateCreated == default)
                 {
                     programActivity.DateCreated = DateTime.Now;
@@ -91,9 +56,8 @@ namespace RccgWeb.Controllers
             {
                 return StatusCode(500, new
                 {
-                    message = "An error occured while adding the activity",
-
-                    error = ex.Message.ToString()
+                    message = "An error occurred while adding the activity.",
+                    error = ex.Message
                 });
             }
         }
