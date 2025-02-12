@@ -1,4 +1,5 @@
-﻿using RccgWeb.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using RccgWeb.Data;
 using RccgWeb.Models;
 using RccgWeb.Services.Interfaces;
 
@@ -18,14 +19,14 @@ namespace RccgWeb.Services
             throw new NotImplementedException();
         }
 
-        public Task<Area> GetAreaByIdAsync(Guid areadId)
+        public async Task<Area> GetAreaByIdAsync(Guid areaId)
         {
-            throw new NotImplementedException();
+            return await _context.Areas.FirstOrDefaultAsync(a => a.AreaId == areaId);
         }
 
-        public Task<IEnumerable<Area>> GetAreasAsync()
+        public async Task<IEnumerable<Area>> GetAreasAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Areas.ToListAsync();
         }
 
         public Task UpdateAreaAsync(Area area)

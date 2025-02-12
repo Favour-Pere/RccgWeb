@@ -6,7 +6,7 @@ namespace RccgWeb.Services.Interfaces
     {
         Task<IEnumerable<Area>> GetAreasAsync();
 
-        Task<Area> GetAreaByIdAsync(Guid areadId);
+        Task<Area> GetAreaByIdAsync(Guid areaId);
 
         Task AddAreaAsync(Area area);
 
