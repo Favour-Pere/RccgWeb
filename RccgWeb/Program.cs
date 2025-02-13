@@ -1,6 +1,8 @@
 using RccgWeb.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using RccgWeb.Services.Interfaces;
+using RccgWeb.Services;
 
 namespace RccgWeb
 {
@@ -17,6 +19,7 @@ namespace RccgWeb
                 options.UseSqlServer(builder.Configuration.GetConnectionString("RccgConnectionStrings"));
             }
            );
+            builder.Services.AddScoped<IAreaService, AreaService>();
 
             var app = builder.Build();
 

@@ -28,12 +28,11 @@ namespace RccgWeb.Models
         [StringLength(200)]
         public string Location { get; set; }
 
-        [ForeignKey("Zone")]
-        public Guid ZoneId { get; set; }
+        public Guid? ZoneId { get; set; }
 
         [JsonIgnore]
         public Zone Zone { get; set; }
 
-        public ICollection<Parish> Parishes { get; set; }
+        public ICollection<Parish> Parishes { get; set; } 
     }
 }
