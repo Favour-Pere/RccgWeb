@@ -35,9 +35,11 @@ namespace RccgWeb.Services
             return await _context.Areas.ToListAsync();
         }
 
-        public Task UpdateAreaAsync(Area area)
+        public async Task UpdateAreaAsync(Area area)
         {
-            throw new NotImplementedException();
+            _context.Areas.Update(area);
+
+            await _context.SaveChangesAsync();
         }
     }
 }
