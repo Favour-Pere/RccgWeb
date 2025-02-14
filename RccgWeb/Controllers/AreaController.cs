@@ -1,14 +1,16 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using RccgWeb.Data;
 using RccgWeb.Models;
 using RccgWeb.Services.Interfaces;
+using RccgWeb.ViewModel;
 
 namespace RccgWeb.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AreaController : ControllerBase
+    public class AreaController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly IAreaService _areaService;
@@ -17,6 +19,38 @@ namespace RccgWeb.Controllers
         {
             _context = context;
             _areaService = areaService;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            var areas = await _context.Areas.ToListAsync();
+
+            return View(areas);
+        }
+
+        public IActionResult AddArea()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddArea(AreaViewModel areaViewModel)
+        {
+            if (area.ZoneId != null)
+            {
+                area.AreaId = Guid.NewGuid();
+                area.ChurchId = ChurchIdGenerator.GenerateChurchId(_context);
+
+                await _areaService.AddAreaAsync(area);
+            }
+            else
+            {
+                return BadRequest("No existing Zone found. Please create a Zone first.");
+            }
+            return Ok(new
+            {
+                message = "Area added successfully"
+            });
         }
 
         [HttpPost("create")]
@@ -73,26 +107,6 @@ namespace RccgWeb.Controllers
             }
 
             return Ok(area);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> AddArea([FromBody] Area area)
-        {
-            if (area.ZoneId != null)
-            {
-                area.AreaId = Guid.NewGuid();
-                area.ChurchId = ChurchIdGenerator.GenerateChurchId(_context);
-
-                await _areaService.AddAreaAsync(area);
-            }
-            else
-            {
-                return BadRequest("No existing Zone found. Please create a Zone first.");
-            }
-            return Ok(new
-            {
-                message = "Area added successfully"
-            });
         }
     }
 }
