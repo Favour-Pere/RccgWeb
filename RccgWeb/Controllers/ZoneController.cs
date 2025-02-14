@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RccgWeb.Data;
 using RccgWeb.Models;
+using RccgWeb.ViewModel;
 
 namespace RccgWeb.Controllers
 {
@@ -29,13 +30,19 @@ namespace RccgWeb.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddZone(Zone zone)
+        public async Task<IActionResult> AddZone(ZoneViewModel zoneViewModel)
         {
             if (ModelState.IsValid)
             {
-                zone.ZoneId = Guid.NewGuid();
-                zone.ChurchId = ChurchIdGenerator.GenerateChurchId(_context);
-                zone.DateCreated = DateTime.Now;
+                var zone = new Zone
+                {
+                    ZoneId = Guid.NewGuid(),
+                    ChurchId = ChurchIdGenerator.GenerateChurchId(_context),
+                    ZoneName = zoneViewModel.ZoneName,
+                    ZonePastor = zoneViewModel.ZonePastor,
+                    DateCreated = DateTime.Now,
+                    Location = zoneViewModel.Location,
+                };
 
                 _context.Zones.Add(zone);
 
@@ -44,7 +51,7 @@ namespace RccgWeb.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(zone);
+            return View(zoneViewModel);
         }
 
         public async Task<IActionResult> Details(Guid id)

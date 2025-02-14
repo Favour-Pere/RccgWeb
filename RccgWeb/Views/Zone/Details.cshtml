@@ -1,0 +1,29 @@
+﻿@model Zone
+
+<h2>Zone Details</h2>
+<div class="form-group">
+    <label>Church Id</label>
+    <p>@Model.ChurchId</p>
+</div>
+
+<div class="form-group">
+    <label>Zone Name:</label>
+    <p>@Model.ZoneName</p>
+</div>
+
+<div class="form-group">
+    <label>Zone Pastor:</label>
+    <p>@Model.ZonePastor</p>
+</div>
+
+<div class="form-group">
+    <label>Location:</label>
+    <p>@Model.Location</p>
+</div>
+
+<div class="form-group">
+    <label>Date Created:</label>
+    <p>@Model.DateCreated.ToShortDateString()</p>
+</div>
+
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>

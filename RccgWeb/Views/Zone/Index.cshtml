@@ -1,0 +1,32 @@
+﻿@model IEnumerable<RccgWeb.Models.Zone>
+
+<h2>Zones</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Pastor</th>
+            <th>Location</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var zone in Model)
+        {
+            <tr>
+                <td>@zone.ZoneName</td>
+                <td>@zone.ZonePastor</td>
+                <td>@zone.Location</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@zone.ZoneId" class="btn btn-info">Details</a>
+                    <a asp-action="AreasUnderZone" asp-route-id="@zone.ZoneId" class="btn btn-warning">Areas</a>
+                    <a asp-action="Delete" asp-route-id="@zone.ZoneId" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="AddZone" class="btn btn-primary">Add New Zone</a>

@@ -1,0 +1,27 @@
+﻿@model IEnumerable<Area>
+
+<h2>Areas Under Zone</h2>
+
+<table class="table-bordered table">
+    <thead>
+        <tr>
+            <th>Church Id</th>
+            <th>Area Name</th>
+            <th>Pastor</th>
+            <th>Location</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var area in Model)
+        {
+            <tr>
+                <td>@area.ChurchId</td>
+                <td>@area.AreaName</td>
+                <td>@area.AreaPastor</td>
+                <td>@area.Location</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Index" class="btn btn-secondary">Back to Zones</a>
