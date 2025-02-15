@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RccgWeb.Data;
 using RccgWeb.Models;
@@ -8,8 +9,6 @@ using RccgWeb.ViewModel;
 
 namespace RccgWeb.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
     public class AreaController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -28,29 +27,45 @@ namespace RccgWeb.Controllers
             return View(areas);
         }
 
-        public IActionResult AddArea()
+        [HttpGet]
+        public async Task<IActionResult> AddArea()
         {
-            return View();
+            var zones = await _context.Zones.Select(z => new SelectListItem
+            {
+                Value = z.ZoneId.ToString(),
+                Text = z.ZoneName
+            }).ToListAsync();
+
+            var viewModel = new AreaViewModel
+            {
+                Zones = zones
+            };
+            return View(viewModel);
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddArea(AreaViewModel areaViewModel)
         {
-            if (area.ZoneId != null)
+            if (ModelState.IsValid)
             {
-                area.AreaId = Guid.NewGuid();
-                area.ChurchId = ChurchIdGenerator.GenerateChurchId(_context);
+                var area = new Area
+                {
+                    AreaId = Guid.NewGuid(),
+                    ChurchId = ChurchIdGenerator.GenerateChurchId(_context),
+                    AreaName = areaViewModel.AreaName,
+                    AreaPastor = areaViewModel.AreaPastor,
+                    DateCreated = DateTime.Now,
+                    Location = areaViewModel.Location,
+                    ZoneId = areaViewModel.ZoneId
+                };
 
                 await _areaService.AddAreaAsync(area);
+
+                return RedirectToAction(nameof(Index));
             }
-            else
-            {
-                return BadRequest("No existing Zone found. Please create a Zone first.");
-            }
-            return Ok(new
-            {
-                message = "Area added successfully"
-            });
+
+            return View(areaViewModel);
         }
 
         [HttpPost("create")]

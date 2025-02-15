@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
 
 namespace RccgWeb.ViewModel
 {
@@ -16,8 +17,9 @@ namespace RccgWeb.ViewModel
         [Display(Name = "Location")]
         public string Location { get; set; }
 
+        [Required]
         public Guid ZoneId { get; set; }
 
-        public string ZoneName { get; set; }
+        public List<SelectListItem> Zones { get; set; }
     }
 }
