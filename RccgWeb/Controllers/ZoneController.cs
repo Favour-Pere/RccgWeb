@@ -23,6 +23,7 @@ namespace RccgWeb.Controllers
             return View(zones);
         }
 
+        [HttpGet]
         public IActionResult AddZone()
         {
             return View();

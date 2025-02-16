@@ -17,9 +17,8 @@ namespace RccgWeb.ViewModel
         [Display(Name = "Location")]
         public string Location { get; set; }
 
-        [Required]
         public Guid ZoneId { get; set; }
 
-        public List<SelectListItem> Zones { get; set; }
+        public List<SelectListItem>? Zones { get; set; }
     }
 }

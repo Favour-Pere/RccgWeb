@@ -1,0 +1,29 @@
+﻿@model Area
+
+<h2>Area Details</h2>
+<div class="form-group">
+    <label>Church Id</label>
+    <p>@Model.ChurchId</p>
+</div>
+
+<div>
+    <label>Area Name:</label>
+    <p>@Model.AreaName</p>
+</div>
+
+<div>
+    <label>Area Pastor:</label>
+    <p>@Model.AreaPastor</p>
+</div>
+
+<div>
+    <label>Location</label>
+    <p>@Model.Location</p>
+</div>
+
+<div>
+    <label>Date Created</label>
+    <p>@Model.DateCreated.ToShortDateString()</p>
+</div>
+
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>

@@ -1,0 +1,32 @@
+﻿@model IEnumerable<RccgWeb.Models.Area>
+
+<h2>Areas</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Pastor</th>
+            <th>Location</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var area in Model)
+        {
+            <tr>
+                <td>@area.AreaName</td>
+                <td>@area.AreaPastor</td>
+                <td>@area.Location</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@area.AreaId" class="btn btn-info">Details</a>
+                    <a asp-action="ParishesUnderArea" asp-route-id="@area.AreaId" class="btn btn-warning">Areas</a>
+                    <a asp-action="Delete" asp-route-id="@area.AreaId" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="AddArea" class="btn btn-primary">Add New Area</a>

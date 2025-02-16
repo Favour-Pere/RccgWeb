@@ -43,6 +43,7 @@ namespace RccgWeb.Controllers
             return View(viewModel);
         }
 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddArea(AreaViewModel areaViewModel)
@@ -59,69 +60,94 @@ namespace RccgWeb.Controllers
                     Location = areaViewModel.Location,
                     ZoneId = areaViewModel.ZoneId
                 };
+                _context.Areas.Add(area);
 
-                await _areaService.AddAreaAsync(area);
+                await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
             }
-
+            areaViewModel.Zones = await _context.Zones
+        .Select(z => new SelectListItem { Value = z.ZoneId.ToString(), Text = z.ZoneName })
+        .ToListAsync();
             return View(areaViewModel);
         }
 
-        [HttpPost("create")]
-        public async Task<IActionResult> CreateArea()
-        {
-            var existingZone = _context.Zones.FirstOrDefault();
-
-            if (existingZone == null)
-            {
-                return BadRequest("No existing Zone found. Please create a Zone first.");
-            }
-
-            var newArea = new Area
-            {
-                AreaId = Guid.NewGuid(),
-                ChurchId = ChurchIdGenerator.GenerateChurchId(_context),
-                AreaName = "Test Area",
-                AreaPastor = "Test Pastor",
-                DateCreated = DateTime.Now,
-                Location = "Area Location",
-                ZoneId = existingZone.ZoneId
-            };
-
-            _context.Areas.Add(newArea);
-
-            await _context.SaveChangesAsync();
-
-            return Ok(new
-            {
-                message = "Area added successfully!",
-                data = newArea
-            });
-        }
-
         [HttpGet]
-        public async Task<IActionResult> GetAreas()
-        {
-            var areas = await _areaService.GetAreasAsync();
-
-            return Ok(areas);
-        }
-
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetAreaById(Guid id)
+        public async Task<IActionResult> Details(Guid id)
         {
             var area = await _areaService.GetAreaByIdAsync(id);
 
             if (area == null)
             {
-                return NotFound(new
-                {
-                    message = "Area not found"
-                });
+                return NotFound();
             }
 
-            return Ok(area);
+            return View(area);
         }
+
+        public async Task<IActionResult> ParishesUnderArea(Guid id)
+        {
+            var parishes = await _context.Parishes.Where(p => p.ParishId == id).ToListAsync();
+
+            ViewBag.ParishId = id;
+
+            return View(parishes);
+        }
+
+        //[HttpPost("create")]
+        //public async Task<IActionResult> CreateArea()
+        //{
+        //    var existingZone = _context.Zones.FirstOrDefault();
+
+        //    if (existingZone == null)
+        //    {
+        //        return BadRequest("No existing Zone found. Please create a Zone first.");
+        //    }
+
+        //    var newArea = new Area
+        //    {
+        //        AreaId = Guid.NewGuid(),
+        //        ChurchId = ChurchIdGenerator.GenerateChurchId(_context),
+        //        AreaName = "Test Area",
+        //        AreaPastor = "Test Pastor",
+        //        DateCreated = DateTime.Now,
+        //        Location = "Area Location",
+        //        ZoneId = existingZone.ZoneId
+        //    };
+
+        //    _context.Areas.Add(newArea);
+
+        //    await _context.SaveChangesAsync();
+
+        //    return Ok(new
+        //    {
+        //        message = "Area added successfully!",
+        //        data = newArea
+        //    });
+        //}
+
+        //[HttpGet]
+        //public async Task<IActionResult> GetAreas()
+        //{
+        //    var areas = await _areaService.GetAreasAsync();
+
+        //    return Ok(areas);
+        //}
+
+        //[HttpGet("{id}")]
+        //public async Task<IActionResult> GetAreaById(Guid id)
+        //{
+        //    var area = await _areaService.GetAreaByIdAsync(id);
+
+        //    if (area == null)
+        //    {
+        //        return NotFound(new
+        //        {
+        //            message = "Area not found"
+        //        });
+        //    }
+
+        //    return Ok(area);
+        //}
     }
 }
