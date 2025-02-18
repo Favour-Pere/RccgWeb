@@ -1,0 +1,29 @@
+﻿@model Parish
+
+<h2>Parish Details</h2>
+
+<div class="form-group">
+    <label>Church Id</label>
+    <p>@Model.ParishName</p>
+</div>
+
+<div>
+    <label>Parish Name:</label>
+    <p>@Model.ParishName</p>
+</div>
+
+<div>
+    <label>
+        Location
+    </label>
+    <p>
+        @Model.Location
+    </p>
+</div>
+
+<div>
+    <label>Date Created</label>
+    <p>@Model.DateCreated.ToShortDateString()</p>
+</div>
+
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>
