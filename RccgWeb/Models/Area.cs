@@ -12,27 +12,27 @@ namespace RccgWeb.Models
 
         [Required]
         [StringLength(20)]
-        public string ChurchId { get; set; }
+        public string ChurchId { get; set; } = string.Empty;
 
         [Required]
         [StringLength(100)]
-        public string AreaName { get; set; }
+        public string AreaName { get; set; } = string.Empty;
 
         [Required]
         [StringLength(100)]
-        public string AreaPastor { get; set; }
+        public string AreaPastor { get; set; } = string.Empty;
 
         public DateTime DateCreated { get; set; } = DateTime.Now;
 
         [Required]
         [StringLength(200)]
-        public string Location { get; set; }
+        public string Location { get; set; } = string.Empty;
 
         public Guid? ZoneId { get; set; }
 
         [JsonIgnore]
         public Zone Zone { get; set; }
 
-        public ICollection<Parish> Parishes { get; set; } 
+        public ICollection<Parish> Parishes { get; set; }
     }
 }
