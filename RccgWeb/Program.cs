@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RccgWeb.Services.Interfaces;
 using RccgWeb.Services;
+using RccgWeb.Models;
 
 namespace RccgWeb
 {
@@ -19,7 +20,14 @@ namespace RccgWeb
                 options.UseSqlServer(builder.Configuration.GetConnectionString("RccgConnectionStrings"));
             }
            );
+            builder.Services.AddIdentity<User, IdentityRole>();
             builder.Services.AddScoped<IAreaService, AreaService>();
+
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Account/Login";
+                options.AccessDeniedPath = "/Account/AccessDenied";
+            });
 
             var app = builder.Build();
 
