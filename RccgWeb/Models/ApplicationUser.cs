@@ -13,5 +13,9 @@ namespace RccgWeb.Models
         public Guid? ParishId { get; set; }
 
         public bool IsAssigned => !string.IsNullOrEmpty(ChurchId);
+
+        public virtual Zone? Zone { get; set; }
+        public virtual Area? Area { get; set; }
+        public virtual Parish? Parish { get; set; }
     }
 }

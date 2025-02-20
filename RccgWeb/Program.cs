@@ -20,8 +20,9 @@ namespace RccgWeb
                 options.UseSqlServer(builder.Configuration.GetConnectionString("RccgConnectionStrings"));
             }
            );
-            builder.Services.AddIdentity<User, IdentityRole>();
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>();
             builder.Services.AddScoped<IAreaService, AreaService>();
+            builder.Services.AddScoped<IChurchAdminService, ChurchAdminService>();
 
             builder.Services.ConfigureApplicationCookie(options =>
             {

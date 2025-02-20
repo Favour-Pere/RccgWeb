@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RccgWeb.Data;
@@ -6,18 +7,24 @@ using RccgWeb.Models;
 
 namespace RccgWeb.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ProgramActivityController : ControllerBase
+    public class ProgramActivityController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ProgramActivityController(ApplicationDbContext context)
+        public ProgramActivityController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
-        [HttpPost("AddActivity")]
+        [HttpGet]
+        public IActionResult AddActivity()
+        {
+            return View(new ProgramActivityViewModel());
+        }
+
+        [HttpPost]
         public async Task<IActionResult> AddActivity([FromBody] ProgramActivity programActivity)
         {
             if (programActivity == null || string.IsNullOrEmpty(programActivity.ChurchId))

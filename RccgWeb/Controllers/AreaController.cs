@@ -43,7 +43,6 @@ namespace RccgWeb.Controllers
             return View(viewModel);
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddArea(AreaViewModel areaViewModel)
