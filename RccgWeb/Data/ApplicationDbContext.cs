@@ -4,7 +4,7 @@ using RccgWeb.Models;
 
 namespace RccgWeb.Data
 {
-    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<User>(options)
+    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<ApplicationUser>(options)
     {
         public DbSet<Zone> Zones { get; set; }
 
@@ -20,7 +20,7 @@ namespace RccgWeb.Data
 
             modelBuilder.Entity<ProgramActivity>().Property(a => a.ChurchId).IsRequired();  // Ensure ChurchId is required
 
-            modelBuilder.Entity<User>().HasIndex(u => u.ChurchId).IsUnique(true);
+            modelBuilder.Entity<ApplicationUser>().HasIndex(u => u.ChurchId).IsUnique(true);
         }
 
         public override int SaveChanges()

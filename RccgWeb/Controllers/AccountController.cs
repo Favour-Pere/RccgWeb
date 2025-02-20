@@ -29,20 +29,22 @@ namespace RccgWeb.Controllers
                 var user = new ApplicationUser
                 {
                     UserName = model.Email,
-                    Email = model.Email
+                    Email = model.Email,
+                    PhoneNumber = model.PhoneNumber,
+                    ChurchId = string.Empty
                 };
 
                 var result = await _userManager.CreateAsync(user, model.Password);
 
                 if (result.Succeeded)
                 {
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("Index", "Home");
+                    await _userManager.AddToRoleAsync(user, "User");
+                    return RedirectToAction("Login", "Account");
                 }
 
                 foreach (var error in result.Errors)
                 {
-                    ModelState.AddModelError("", error.Description);
+                    ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
 

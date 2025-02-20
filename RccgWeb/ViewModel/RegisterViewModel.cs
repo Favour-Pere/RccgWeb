@@ -13,6 +13,8 @@ namespace RccgWeb.ViewModel
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        public string ChurchId { get; set; }
+        [Required]
+        [Phone]
+        public string PhoneNumber { get; set; }
     }
 }

@@ -36,6 +36,7 @@ namespace RccgWeb.Controllers
             return View(new ChurchAssignmentViewModel());
         }
 
+        [HttpPost]
         public async Task<IActionResult> AssignChurch(string userId, string churchId)
         {
             var user = await _userManager.FindByIdAsync(userId);
@@ -48,6 +49,21 @@ namespace RccgWeb.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveFromChurch(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null) return NotFound();
+
+            user.ChurchId = string.Empty;
+
+            await _userManager.UpdateAsync(user);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        // this section might not be needed
 
         [HttpPost]
         [ValidateAntiForgeryToken]
