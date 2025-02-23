@@ -22,6 +22,7 @@ namespace RccgWeb.Controllers
             return View();
         }
 
+        [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
@@ -38,8 +39,7 @@ namespace RccgWeb.Controllers
 
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(user, "User");
-                    return RedirectToAction("Login", "Account");
+                    return RedirectToAction("Index", "ProgramActivity");
                 }
 
                 foreach (var error in result.Errors)
@@ -51,11 +51,13 @@ namespace RccgWeb.Controllers
             return View(model);
         }
 
+        [HttpGet]
         public IActionResult Login()
         {
             return View();
         }
 
+        [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (ModelState.IsValid)
@@ -64,7 +66,7 @@ namespace RccgWeb.Controllers
 
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "ProgramActivity");
                 }
 
                 ModelState.AddModelError("", "Invalid login attempt");

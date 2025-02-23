@@ -24,9 +24,9 @@ namespace RccgWeb.Services
             if (user == null) return false;
 
             user.ChurchId = model.ChurchId;
-            user.ParishId = model.ParishId;
-            user.AreaId = model.AreaId;
-            user.ZoneId = model.ZoneId;
+            //user.ParishId = model.ParishId;
+            //user.AreaId = model.AreaId;
+            //user.ZoneId = model.ZoneId;
 
             var result = await _userManager.UpdateAsync(user);
 
@@ -40,9 +40,6 @@ namespace RccgWeb.Services
             if (user == null) return false;
 
             user.ChurchId = "";
-            user.ParishId = Guid.Empty;
-            user.AreaId = Guid.Empty;
-            user.ZoneId = Guid.Empty;
 
             var result = await _userManager.UpdateAsync(user);
 

@@ -18,11 +18,11 @@ namespace RccgWeb.Controllers
             _userManager = userManager;
         }
 
-        [HttpGet]
-        public IActionResult AddActivity()
-        {
-            return View(new ProgramActivityViewModel());
-        }
+        //[HttpGet]
+        //public IActionResult AddActivity()
+        //{
+        //    return View(new ProgramActivityViewModel());
+        //}
 
         [HttpPost]
         public async Task<IActionResult> AddActivity([FromBody] ProgramActivity programActivity)
@@ -50,7 +50,7 @@ namespace RccgWeb.Controllers
                     programActivity.DateCreated = DateTime.Now;
                 }
 
-                _context.Activities.Add(programActivity);
+                _context.ProgramActivities.Add(programActivity);
                 await _context.SaveChangesAsync();
 
                 return Ok(new

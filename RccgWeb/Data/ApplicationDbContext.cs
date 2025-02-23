@@ -12,7 +12,7 @@ namespace RccgWeb.Data
 
         public DbSet<Parish> Parishes { get; set; }
 
-        public DbSet<ProgramActivity> Activities { get; set; }
+        public DbSet<ProgramActivity> ProgramActivities { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

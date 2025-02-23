@@ -20,10 +20,18 @@ namespace RccgWeb
                 options.UseSqlServer(builder.Configuration.GetConnectionString("RccgConnectionStrings"));
             }
            );
-            builder.Services.AddIdentity<ApplicationUser, IdentityRole>();
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
             builder.Services.AddScoped<IAreaService, AreaService>();
             builder.Services.AddScoped<IChurchAdminService, ChurchAdminService>();
+            //builder.Services.AddDefaultIdentity<ApplicationUser>(
+            //    options =>
+            //    {
+            //        options.SignIn.RequireConfirmedPhoneNumber = false;
+            //        options.SignIn.RequireConfirmedAccount = false;
 
+            //        options.User.RequireUniqueEmail = true;
+            //    }
+            //);
             builder.Services.ConfigureApplicationCookie(options =>
             {
                 options.LoginPath = "/Account/Login";
@@ -42,6 +50,7 @@ namespace RccgWeb
 
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
@@ -50,6 +59,12 @@ namespace RccgWeb
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}")
                 .WithStaticAssets();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                IdentitySeeder.SeedRolesAndAdminAsync(services);
+            }
 
             app.Run();
         }

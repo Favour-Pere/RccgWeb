@@ -10,7 +10,6 @@ using RccgWeb.ViewModel;
 
 namespace RccgWeb.Controllers
 {
-    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -28,6 +27,12 @@ namespace RccgWeb.Controllers
         {
             var users = await _userManager.Users.Where(u => string.IsNullOrEmpty(u.ChurchId)).ToListAsync();
 
+            return View(users);
+        }
+
+        public async Task<IActionResult> UserList()
+        {
+            var users = await _userManager.Users.ToListAsync();
             return View(users);
         }
 

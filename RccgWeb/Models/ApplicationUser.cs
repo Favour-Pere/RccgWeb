@@ -1,21 +1,16 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace RccgWeb.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        public string ChurchId { get; set; } = String.Empty;
+        [Required]
+        public string FirstName { get; set; } = string.Empty;
 
-        public Guid? ZoneId { get; set; }
+        [Required]
+        public string LastName { get; set; } = string.Empty;
 
-        public Guid? AreaId { get; set; }
-
-        public Guid? ParishId { get; set; }
-
-        public bool IsAssigned => !string.IsNullOrEmpty(ChurchId);
-
-        public virtual Zone? Zone { get; set; }
-        public virtual Area? Area { get; set; }
-        public virtual Parish? Parish { get; set; }
+        public string ChurchId { get; set; } = string.Empty;
     }
 }
