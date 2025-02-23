@@ -1,49 +1,47 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using RccgWeb.Models;
 
 namespace RccgWeb.Data
 {
-    public class IdentitySeeder
+    public static class IdentitySeeder
     {
-        public static async Task SeedRolesAndAdminAsync(IServiceProvider serviceProvider)
+        public static async Task InitializeAsync(IServiceProvider services)
         {
-            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
-            var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            await EnsureRolesAsync(roleManager);
 
-            string[] roleNames = { "Admin", "User" };
+            var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
 
-            // Ensure roles exist
-            foreach (var roleName in roleNames)
+            await EnsureAdminAsync(userManager);
+        }
+
+        public static async Task EnsureAdminAsync(UserManager<ApplicationUser> userManager)
+        {
+            var admin = await userManager.Users.Where(x => x.UserName == "admin@province4.local").SingleOrDefaultAsync();
+
+            if (admin != null) return;
+
+            admin = new ApplicationUser
             {
-                if (!await roleManager.RoleExistsAsync(roleName))
-                {
-                    await roleManager.CreateAsync(new IdentityRole(roleName));
-                }
-            }
+                UserName = "admin@province4.local",
+                Email = "admin@province4.local",
+                FirstName = "admin",
+                LastName = "admin",
+            };
 
-            // Ensure admin user exists
-            string adminEmail = "admin@example.com";
-            string adminPassword = "Admin@123"; // Change this later!
+            await userManager.CreateAsync(admin, "ProvincialAdmin");
 
-            var adminUser = await userManager.FindByEmailAsync(adminEmail);
+            await userManager.AddToRoleAsync(admin, "Admin");
+        }
 
-            if (adminUser == null)
-            {
-                var newAdmin = new ApplicationUser
-                {
-                    UserName = adminEmail,
-                    Email = adminEmail,
-                    EmailConfirmed = true
-                };
+        public static async Task EnsureRolesAsync(RoleManager<IdentityRole> roleManager)
+        {
+            var alreadyExists = await roleManager.RoleExistsAsync("Admin");
+            if (alreadyExists) return;
 
-                var createAdminResult = await userManager.CreateAsync(newAdmin, adminPassword);
-
-                if (createAdminResult.Succeeded)
-                {
-                    await userManager.AddToRoleAsync(newAdmin, "Admin");
-                }
-            }
+            await roleManager.CreateAsync(new IdentityRole("Admin"));
         }
     }
 }
