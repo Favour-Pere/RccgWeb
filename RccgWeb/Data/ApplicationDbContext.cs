@@ -21,8 +21,6 @@ namespace RccgWeb.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<ProgramActivity>().Property(a => a.ChurchId).IsRequired();  // Ensure ChurchId is required
-
-            modelBuilder.Entity<ApplicationUser>().HasIndex(u => u.ChurchId).IsUnique(true);
         }
 
         public override int SaveChanges()

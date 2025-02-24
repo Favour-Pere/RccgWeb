@@ -8,12 +8,13 @@ namespace RccgWeb.Data
     {
         public static async Task InitializeAsync(IServiceProvider services)
         {
-            var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
-
-            await EnsureAdminAsync(userManager);
             var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
             await EnsureRolesAsync(roleManager);
+
+            var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+
+            await EnsureAdminAsync(userManager);
         }
 
         public static async Task EnsureAdminAsync(UserManager<ApplicationUser> userManager)
@@ -24,20 +25,33 @@ namespace RccgWeb.Data
 
             admin = new ApplicationUser
             {
+                Id = Guid.NewGuid().ToString(),
                 UserName = "admin@province4.local",
                 FirstName = "admin",
                 LastName = "admin",
                 Email = "admin@province4.local",
                 PhoneNumber = "07040672132",
-                ChurchId = null
+                EmailConfirmed = true
             };
 
-            var result = await userManager.CreateAsync(admin, "ProvincialAdmin");
+            var result = await userManager.CreateAsync(admin, "Provincial@Admin4");
 
-            var result2 = await userManager.AddToRoleAsync(admin, "Admin");
+            if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                {
+                    Console.WriteLine($"Error: {error.Description}");
+                }
 
-            Console.WriteLine(result);
-            Console.WriteLine(result2);
+                return;
+            }
+
+            admin = await userManager.FindByEmailAsync("admin@province4.local");
+
+            if (admin != null)
+            {
+                await userManager.AddToRoleAsync(admin, "Admin");
+            }
         }
 
         public static async Task EnsureRolesAsync(RoleManager<IdentityRole> roleManager)

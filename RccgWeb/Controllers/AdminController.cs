@@ -48,20 +48,34 @@ namespace RccgWeb.Controllers
 
             if (user == null) return NotFound();
 
-            await _userManager.UpdateAsync(user);
+            var existingAssignment = await _context.UserChurches.FirstOrDefaultAsync(uc => uc.UserId == userId);
 
+            if (existingAssignment != null)
+            {
+                existingAssignment.ChurchId = churchId;
+            }
+            else
+            {
+                _context.UserChurches.Add(new UserChurch
+                {
+                    UserId = userId,
+                    ChurchId = churchId
+                });
+            }
+
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         [HttpPost]
-        public async Task<IActionResult> RemoveFromChurch(string userId)
+        public async Task<IActionResult> UnassignChurch(string userId)
         {
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null) return NotFound();
+            var userChurch = await _context.UserChurches.FirstOrDefaultAsync(uc => uc.UserId == userId);
+            if (userChurch == null) return NotFound();
 
-            user.ChurchId = string.Empty;
+            _context.UserChurches.Remove(userChurch);
 
-            await _userManager.UpdateAsync(user);
+            await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
         }

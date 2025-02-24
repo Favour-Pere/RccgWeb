@@ -23,7 +23,6 @@ namespace RccgWeb.Services
 
             if (user == null) return false;
 
-            user.ChurchId = model.ChurchId;
             //user.ParishId = model.ParishId;
             //user.AreaId = model.AreaId;
             //user.ZoneId = model.ZoneId;
@@ -38,8 +37,6 @@ namespace RccgWeb.Services
             var user = await _userManager.FindByIdAsync(userId);
 
             if (user == null) return false;
-
-            user.ChurchId = "";
 
             var result = await _userManager.UpdateAsync(user);
 
