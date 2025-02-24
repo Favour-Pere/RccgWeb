@@ -9,6 +9,24 @@ namespace RccgWeb
 {
     public class Program
     {
+        public static void InitializeDatabase(IHost host)
+        {
+            using var scopee = host.Services.CreateScope();
+
+            var services = scopee.ServiceProvider;
+
+            try
+            {
+                IdentitySeeder.InitializeAsync(services).Wait();
+            }
+            catch (Exception error)
+            {
+                var logger = services.GetRequiredService<ILogger<Program>>();
+
+                logger.LogError(error, "An error occured while seeding the database.");
+            }
+        }
+
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -32,13 +50,15 @@ namespace RccgWeb
             //        options.User.RequireUniqueEmail = true;
             //    }
             //);
-            builder.Services.ConfigureApplicationCookie(options =>
-            {
-                options.LoginPath = "/Account/Login";
-                options.AccessDeniedPath = "/Account/AccessDenied";
-            });
+            //builder.Services.ConfigureApplicationCookie(options =>
+            //{
+            //    options.LoginPath = "/Account/Login";
+            //    options.AccessDeniedPath = "/Account/AccessDenied";
+            //});
 
             var app = builder.Build();
+            InitializeDatabase(app);
+            app.Services.CreateScope().ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
@@ -59,12 +79,6 @@ namespace RccgWeb
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}")
                 .WithStaticAssets();
-
-            using (var scope = app.Services.CreateScope())
-            {
-                var services = scope.ServiceProvider;
-                IdentitySeeder.SeedRolesAndAdminAsync(services);
-            }
 
             app.Run();
         }

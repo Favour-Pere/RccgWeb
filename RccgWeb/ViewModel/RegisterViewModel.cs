@@ -5,13 +5,15 @@ namespace RccgWeb.ViewModel
 {
     public class RegisterViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "First Name is required")]
+        [Display(Name = "First Name")]
         public string FirstName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Last Name is required")]
+        [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Email is required")]
         [EmailAddress]
         public string Email { get; set; }
 
@@ -19,8 +21,9 @@ namespace RccgWeb.ViewModel
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Phone number is required")]
         [Phone]
+        [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; }
     }
 }
