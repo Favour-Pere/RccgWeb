@@ -10,7 +10,5 @@ namespace RccgWeb.Models
 
         [Required]
         public string LastName { get; set; } = string.Empty;
-
-        public string ChurchId { get; set; } = string.Empty;
     }
 }

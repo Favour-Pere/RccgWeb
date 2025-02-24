@@ -14,6 +14,8 @@ namespace RccgWeb.Data
 
         public DbSet<ProgramActivity> ProgramActivities { get; set; }
 
+        public DbSet<UserChurch> UserChurches { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

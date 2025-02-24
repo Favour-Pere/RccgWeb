@@ -8,13 +8,12 @@ namespace RccgWeb.Data
     {
         public static async Task InitializeAsync(IServiceProvider services)
         {
-            var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-
-            await EnsureRolesAsync(roleManager);
-
             var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
 
             await EnsureAdminAsync(userManager);
+            var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+            await EnsureRolesAsync(roleManager);
         }
 
         public static async Task EnsureAdminAsync(UserManager<ApplicationUser> userManager)
@@ -26,14 +25,19 @@ namespace RccgWeb.Data
             admin = new ApplicationUser
             {
                 UserName = "admin@province4.local",
-                Email = "admin@province4.local",
                 FirstName = "admin",
                 LastName = "admin",
+                Email = "admin@province4.local",
+                PhoneNumber = "07040672132",
+                ChurchId = null
             };
 
-            await userManager.CreateAsync(admin, "ProvincialAdmin");
+            var result = await userManager.CreateAsync(admin, "ProvincialAdmin");
 
-            await userManager.AddToRoleAsync(admin, "Admin");
+            var result2 = await userManager.AddToRoleAsync(admin, "Admin");
+
+            Console.WriteLine(result);
+            Console.WriteLine(result2);
         }
 
         public static async Task EnsureRolesAsync(RoleManager<IdentityRole> roleManager)

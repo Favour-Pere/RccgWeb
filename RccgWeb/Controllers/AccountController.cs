@@ -30,9 +30,10 @@ namespace RccgWeb.Controllers
                 var user = new ApplicationUser
                 {
                     UserName = model.Email,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
                     Email = model.Email,
                     PhoneNumber = model.PhoneNumber,
-                    ChurchId = string.Empty
                 };
 
                 var result = await _userManager.CreateAsync(user, model.Password);

@@ -25,7 +25,7 @@ namespace RccgWeb.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var users = await _userManager.Users.Where(u => string.IsNullOrEmpty(u.ChurchId)).ToListAsync();
+            var users = await _userManager.Users.ToListAsync();
 
             return View(users);
         }
@@ -47,8 +47,6 @@ namespace RccgWeb.Controllers
             var user = await _userManager.FindByIdAsync(userId);
 
             if (user == null) return NotFound();
-
-            user.ChurchId = churchId;
 
             await _userManager.UpdateAsync(user);
 
