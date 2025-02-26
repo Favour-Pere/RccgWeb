@@ -1,20 +1,26 @@
 ﻿@model RccgWeb.ViewModel.ChurchAssignmentViewModel
 
-@{
-    ViewData["Title"] = "Assign Church to User";
-}
-
 <h2>Assign Church</h2>
-
 <form asp-action="AssignChurch" method="post">
-    <input type="hidden" asp-for="UserId" />
-
     <div class="form-group">
-        <label for="ChurchId">Select Church</label>
-        <select asp-for="ChurchId" asp-items="Model.Churches" class="form-control">
-            <option value="">-- Select Church --</option>
+        <label>User</label>
+        <select name="UserId" class="form-control">
+            @foreach (var user in Model.Users)
+            {
+                <option value="@user.Value">@user.Text</option>
+            }
         </select>
     </div>
 
-    <button type="submit" class="btn btn-success">Assign</button>
+    <div class="form-group">
+        <label>Church</label>
+        <select name="ChurchId" class="form-control">
+            @foreach (var church in Model.Churches)
+            {
+                <option value="@church.Value">@church.Text</option>
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Assign</button>
 </form>

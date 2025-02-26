@@ -5,7 +5,7 @@
 }
 
 <h2>User List</h2>
-
+<a asp-action="AssignChurch" class="btn btn-primary">Assign Church</a>
 <table class="table">
     <thead>
         <tr>
@@ -20,7 +20,10 @@
             <tr>
                 <td>@user.Email</td>
                 <td>
-                    <a asp-action="AssignChurch" asp-route-id="@user.Id" class="btn btn-primary">Assign Church</a>
+                    @user.FirstName @user.LastName
+                </td>
+                <td>
+                    <a asp-action="UnassignChurch" asp-route-id="@user.Id" class="btn btn-danger">Remove Church</a>
                 </td>
             </tr>
         }

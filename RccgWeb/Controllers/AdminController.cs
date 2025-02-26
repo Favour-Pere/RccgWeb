@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RccgWeb.Data;
 using RccgWeb.Models;
 using RccgWeb.Services;
 using RccgWeb.Services.Interfaces;
 using RccgWeb.ViewModel;
+using System.Linq;
 
 namespace RccgWeb.Controllers
 {
@@ -23,6 +25,7 @@ namespace RccgWeb.Controllers
             _churchAdminService = churchAdminService;
         }
 
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             var users = await _userManager.Users.ToListAsync();
@@ -30,42 +33,171 @@ namespace RccgWeb.Controllers
             return View(users);
         }
 
-        public async Task<IActionResult> UserList()
+        public IActionResult AssignChurch()
         {
-            var users = await _userManager.Users.ToListAsync();
-            return View(users);
-        }
+            var assignedUserIds = _context.UserChurches.Select(uc => uc.UserId).ToList();
+            var assignedChurchIds = _context.UserChurches.Select(uc => uc.ChurchId).ToList();
 
-        public IActionResult AssignUser()
-        {
-            return View(new ChurchAssignmentViewModel());
+            var model = new ChurchAssignmentViewModel
+            {
+                Users = _context.Users
+                    .Where(u => !assignedUserIds.Contains(u.Id)) // Fetch unassigned users
+                    .Select(u => new SelectListItem { Value = u.Id, Text = u.Email })
+                    .ToList(),
+
+                Churches = _context.Zones
+                    .Where(z => !assignedChurchIds.Contains(z.ZoneId.ToString()))
+                    .Select(z => new SelectListItem { Value = z.ZoneId.ToString(), Text = z.ZoneName })
+                    .Concat(_context.Areas
+                        .Where(a => !assignedChurchIds.Contains(a.AreaId.ToString()))
+                        .Select(a => new SelectListItem { Value = a.AreaId.ToString(), Text = a.AreaName }))
+                    .Concat(_context.Parishes
+                        .Where(p => !assignedChurchIds.Contains(p.ParishId.ToString()))
+                        .Select(p => new SelectListItem { Value = p.ParishId.ToString(), Text = p.ParishName }))
+                    .ToList()
+            };
+
+            return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AssignChurch(string userId, string churchId)
+        public IActionResult AssignChurch(ChurchAssignmentViewModel model)
         {
-            var user = await _userManager.FindByIdAsync(userId);
-
-            if (user == null) return NotFound();
-
-            var existingAssignment = await _context.UserChurches.FirstOrDefaultAsync(uc => uc.UserId == userId);
-
-            if (existingAssignment != null)
+            if (ModelState.IsValid)
             {
-                existingAssignment.ChurchId = churchId;
-            }
-            else
-            {
-                _context.UserChurches.Add(new UserChurch
+                var userChurch = new UserChurch
                 {
-                    UserId = userId,
-                    ChurchId = churchId
-                });
+                    UserId = model.UserId,
+                    ChurchId = model.ChurchId
+                };
+
+                _context.UserChurches.Add(userChurch);
+                _context.SaveChanges();
+
+                return RedirectToAction(nameof(Index)); // Redirect to confirmation page
             }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return View(model);
         }
+
+        //[HttpGet]
+        //public async Task<IActionResult> AssignChurch(string userId)
+        //{
+        //    if (string.IsNullOrEmpty(userId))
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var user = await _userManager.FindByIdAsync(userId);
+
+        //    if (user == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var assignedChurchIds = _context.UserChurches.Select(uc => uc.ChurchId).ToList();
+
+        //    var unassignedZones = _context.Zones.Where(z => !assignedChurchIds.Contains(z.ZoneId.ToString())).Select(z => new SelectListItem
+        //    {
+        //        Value = z.ZoneId.ToString(),
+        //        Text = z.ZoneName
+        //    }).ToList();
+
+        //    var unassignedAreas = _context.Areas.Where(a => !assignedChurchIds.Contains(a.AreaId.ToString())).Select(a => new SelectListItem
+        //    {
+        //        Value = a.AreaId.ToString(),
+        //        Text = a.AreaName
+        //    }).ToList();
+
+        //    var unassignedParishes = _context.Parishes.Where(p => !assignedChurchIds.Contains(p.ParishId.ToString())).Select(p => new SelectListItem
+        //    {
+        //        Value = p.ParishId.ToString(),
+        //        Text = p.ParishName
+        //    }).ToList();
+
+        //    var unassignedChurches = unassignedZones.Concat(unassignedAreas).Concat(unassignedParishes).ToList();
+
+        //    var model = new ChurchAssignmentViewModel
+        //    {
+        //        UserId = userId,
+        //        Churches = unassignedChurches
+        //    };
+
+        //    return View(model);
+        //}
+
+        //[HttpPost]
+        //public async Task<IActionResult> AssignChurch(ChurchAssignmentViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var user = await _userManager.FindByIdAsync(model.UserId);
+        //        if (user == null)
+        //        {
+        //            return NotFound();
+        //        }
+
+        //        // Assign user to the church
+        //        var userChurch = new UserChurch
+        //        {
+        //            UserId = model.UserId,
+        //            ChurchId = model.ChurchId
+        //        };
+
+        //        _context.UserChurches.Add(userChurch);
+        //        await _context.SaveChangesAsync();
+
+        //        return RedirectToAction("Index", "Admin"); // Redirect to admin dashboard
+        //    }
+
+        //    return View(model);
+        //}
+
+        //[HttpPost]
+        //public async Task<IActionResult> AssignChurch(ChurchAssignmentViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var userChurch = new UserChurch
+        //        {
+        //            UserId = model.UserId,
+        //            ChurchId = model.ChurchId,
+        //        };
+
+        //        _context.UserChurches.Add(userChurch);
+        //        await _context.SaveChangesAsync();
+
+        //        return RedirectToAction("AssignChurch");
+        //    }
+
+        //    return View(model);
+        //}
+
+        //[HttpPost]
+        //public async Task<IActionResult> AssignChurch(string userId, string churchId)
+        //{
+        //    var user = await _userManager.FindByIdAsync(userId);
+
+        //    if (user == null) return NotFound();
+
+        //    var existingAssignment = await _context.UserChurches.FirstOrDefaultAsync(uc => uc.UserId == userId);
+
+        //    if (existingAssignment != null)
+        //    {
+        //        existingAssignment.ChurchId = churchId;
+        //    }
+        //    else
+        //    {
+        //        _context.UserChurches.Add(new UserChurch
+        //        {
+        //            UserId = userId,
+        //            ChurchId = churchId
+        //        });
+        //    }
+
+        //    await _context.SaveChangesAsync();
+        //    return RedirectToAction(nameof(Index));
+        //}
 
         [HttpPost]
         public async Task<IActionResult> UnassignChurch(string userId)
@@ -78,34 +210,6 @@ namespace RccgWeb.Controllers
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
-        }
-
-        // this section might not be needed
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AssignUser(ChurchAssignmentViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var success = await _churchAdminService.AssignUserToChurchAsync(model);
-
-                if (success)
-                {
-                    return RedirectToAction("Index");
-                }
-
-                ModelState.AddModelError("", "Error assigning user.");
-            }
-
-            return View(model);
-        }
-
-        public async Task<IActionResult> RemoveUser(string userId)
-        {
-            var success = await _churchAdminService.RemoveUserFromChurchAsync(userId);
-
-            return success ? RedirectToAction("Index") : BadRequest("Error removing user.");
         }
     }
 }
