@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +8,7 @@ using RccgWeb.Models;
 
 namespace RccgWeb.Controllers
 {
+    [Authorize]
     public class ProgramActivityController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -18,11 +20,19 @@ namespace RccgWeb.Controllers
             _userManager = userManager;
         }
 
-        //[HttpGet]
-        //public IActionResult AddActivity()
-        //{
-        //    return View(new ProgramActivityViewModel());
-        //}
+        
+        public async Task<IActionResult> Index()
+        {
+            var user = _userManager.GetUserAsync(User);
+
+            var userHasChurch = await _context.UserChurches.AnyAsync(uc => uc.UserId == user.Id.ToString());
+
+            if (!userHasChurch)
+            {
+                ViewBag.Message = "You need to be assigned to "
+            }
+
+        }
 
         [HttpPost]
         public async Task<IActionResult> AddActivity([FromBody] ProgramActivity programActivity)
