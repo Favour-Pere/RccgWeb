@@ -6,12 +6,14 @@
 
 <h2>User List</h2>
 <a asp-action="AssignChurch" class="btn btn-primary">Assign Church</a>
+<a asp-action="UnassignChurch" class="btn btn-danger">Remove Church</a>
+
 <table class="table">
     <thead>
         <tr>
             <th>Email</th>
-            <th>Church Assigned</th>
-            <th>Action</th>
+            <th>User</th>
+            <th>Phone Number</th>
         </tr>
     </thead>
     <tbody>
@@ -22,9 +24,7 @@
                 <td>
                     @user.FirstName @user.LastName
                 </td>
-                <td>
-                    <a asp-action="UnassignChurch" asp-route-id="@user.Id" class="btn btn-danger">Remove Church</a>
-                </td>
+                <td>@user.PhoneNumber</td>
             </tr>
         }
     </tbody>
