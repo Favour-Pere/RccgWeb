@@ -12,6 +12,7 @@ using System.Linq;
 
 namespace RccgWeb.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
