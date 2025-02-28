@@ -1,5 +1,7 @@
 ﻿using RccgWeb.Models;
+using RccgWeb.ViewModel;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 
 namespace RccgWeb.CustomValidations
 {
@@ -7,9 +9,9 @@ namespace RccgWeb.CustomValidations
     {
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
-            ProgramActivity activity = (ProgramActivity)validationContext.ObjectInstance;
+            ProgramActivityViewModel programActivity = (ProgramActivityViewModel)validationContext.ObjectInstance;
 
-            if (activity.ActiveWorkers > activity.Attendance)
+            if (programActivity.ActiveWorkers > programActivity.Attendance)
             {
                 return new ValidationResult(ErrorMessage);
             }
