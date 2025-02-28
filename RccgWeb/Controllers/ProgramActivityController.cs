@@ -65,6 +65,11 @@ namespace RccgWeb.Controllers
             return View();
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Create()
+        {
+        }
+
         //[HttpPost]
         //public async Task<IActionResult> AddActivity([FromBody] ProgramActivity programActivity)
         //{
