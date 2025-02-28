@@ -1,0 +1,28 @@
+﻿@model List<ApplicationUser>
+
+@{
+    ViewData["Title"] = "User List";
+}
+
+<h2>User List</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Church Assigned</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Email</td>
+                <td>
+                    <a asp-action="AssignChurch" asp-route-id="@user.Id" class="btn btn-primary">Assign Church</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

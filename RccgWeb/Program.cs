@@ -9,28 +9,43 @@ namespace RccgWeb
 {
     public class Program
     {
+       
+
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddHttpContextAccessor();
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("RccgConnectionStrings"));
             }
            );
-            builder.Services.AddIdentity<User, IdentityRole>();
-            builder.Services.AddScoped<IAreaService, AreaService>();
 
-            builder.Services.ConfigureApplicationCookie(options =>
-            {
-                options.LoginPath = "/Account/Login";
-                options.AccessDeniedPath = "/Account/AccessDenied";
-            });
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+            builder.Services.AddScoped<IAreaService, AreaService>();
+            builder.Services.AddScoped<IChurchAdminService, ChurchAdminService>();
+            //builder.Services.AddDefaultIdentity<ApplicationUser>(
+            //    options =>
+            //    {
+            //        options.SignIn.RequireConfirmedPhoneNumber = false;
+            //        options.SignIn.RequireConfirmedAccount = false;
+
+            //        options.User.RequireUniqueEmail = true;
+            //    }
+            //);
+            //builder.Services.ConfigureApplicationCookie(options =>
+            //{
+            //    options.LoginPath = "/Account/Login";
+            //    options.AccessDeniedPath = "/Account/AccessDenied";
+            //});
 
             var app = builder.Build();
-
+            InitializeDatabase(app);
+            var context = app.Services.CreateScope().ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            context.Database.EnsureCreated();
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
@@ -41,6 +56,7 @@ namespace RccgWeb
 
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
@@ -51,6 +67,23 @@ namespace RccgWeb
                 .WithStaticAssets();
 
             app.Run();
+        }
+        public static void InitializeDatabase(IHost host)
+        {
+            using var scopee = host.Services.CreateScope();
+
+            var services = scopee.ServiceProvider;
+
+            try
+            {
+                IdentitySeeder.InitializeAsync(services).Wait();
+            }
+            catch (Exception error)
+            {
+                var logger = services.GetRequiredService<ILogger<Program>>();
+
+                logger.LogError(error, "An error occured while seeding the database.");
+            }
         }
     }
 }

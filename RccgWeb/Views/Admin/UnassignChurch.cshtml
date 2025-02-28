@@ -1,0 +1,22 @@
+﻿@model RccgWeb.ViewModel.UnassignedChurchViewModel
+
+<h2>Unassign User from Church</h2>
+
+@if (TempData["SuccessMessage"] is not null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<form asp-action="UnassignChurch" asp-controller="Admin" method="post">
+    <div class="form-group">
+        <label>Select User</label>
+
+        <select asp-for="SelectedUserId" asp-items="Model.AssignedUsers" class="form-control">
+            <option value="">-- Select User --</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-danger">Remove Church</button>
+</form>

@@ -1,0 +1,14 @@
+﻿@{
+    var message = TempData["Message"] as string;
+}
+
+<h2>Program Activities</h2>
+
+@if (!string.IsNullOrEmpty(message))
+{
+    <div class="alert alert-warning">@message</div>
+}
+else
+{
+    <a asp-action="Create" class="btn btn-primary">Add Activity</a>
+}

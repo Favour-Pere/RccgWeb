@@ -1,0 +1,68 @@
+﻿@model RccgWeb.ViewModel.ProgramActivityViewModel
+
+@{
+    ViewData["Title"] = "Add Program Activity";
+}
+
+<h2>Add program activity</h2>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="ActivityName"></label>
+        <input asp-for="ActivityName" class="form-control" />
+        <span asp-validation-for="ActivityName" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label asp-for="ActivityDescription"></label>
+        <input asp-for="ActivityDescription" class="form-control" />
+        <span asp-validation-for="ActivityDescription" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="DateCreated"></label>
+        <input asp-for="DateCreated" class="form-control" type="date" />
+        <span asp-validation-for="DateCreated" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Offering"></label>
+        <input asp-for="Offering" class="form-control" type="number" step="0.01" />
+        <span asp-validation-for="Offering" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Tithe"></label>
+        <input asp-for="Tithe" class="form-control" type="number" step="0.01" />
+        <span asp-validation-for="Tithe" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Attendance"></label>
+        <input asp-for="Attendance" class="form-control" type="number" />
+        <span asp-validation-for="Attendance" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ActiveWorkers"></label>
+        <input asp-for="ActiveWorkers" class="form-control" type="number" />
+        <span asp-validation-for="ActiveWorkers" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="PastorInCharge"></label>
+        <input asp-for="PastorInCharge" class="form-control" />
+        <span asp-validation-for="PastorInCharge" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>

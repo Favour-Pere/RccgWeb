@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RccgWeb.Data;
@@ -7,6 +8,7 @@ using RccgWeb.ViewModel;
 
 namespace RccgWeb.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ZoneController : Controller
     {
         private readonly ApplicationDbContext _context;

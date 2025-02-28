@@ -11,29 +11,34 @@ namespace RccgWeb.Models
         public Guid ProgramActivityId { get; set; }
 
         [Required]
-        public string ActivityName { get; set; }
+        public string ActivityName { get; set; } = string.Empty;
 
         [Required]
-        public string ActivityDescription { get; set; }
+        public string ActivityDescription { get; set; } = string.Empty;
 
+        [Required]
         public DateTime DateCreated { get; set; }
 
         public DateTime DateTimeSubmitted { get; set; } = DateTime.Now;
 
+        [Required]
         [Column(TypeName = "decimal(18,2)")]
         public decimal Offering { get; set; }
 
+        [Required]
         [Column(TypeName = "decimal(18,2)")]
         public decimal Tithe { get; set; }
 
+        [Required]
         public int Attendance { get; set; }
 
+        [Required]
         public int ActiveWorkers { get; set; }
 
         [Required]
-        public string PastorInCharge { get; set; }
+        public string PastorInCharge { get; set; } = string.Empty;
 
         [BindProperty]
-        public string ChurchId { get; set; }
+        public string? ChurchId { get; set; }
     }
 }

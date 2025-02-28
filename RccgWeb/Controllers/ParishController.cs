@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ using RccgWeb.ViewModel;
 
 namespace RccgWeb.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ParishController : Controller
     {
         private readonly ApplicationDbContext _context;
