@@ -122,5 +122,26 @@ namespace RccgWeb.Controllers
 
             return RedirectToAction("UnassignChurch");
         }
+
+        public async Task<IActionResult> AllProgramActivity()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user is null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var userHasChurch = await _context.UserChurches.FirstOrDefaultAsync(uc => uc.UserId == user.Id.ToString());
+
+            if (userHasChurch == null)
+            {
+                TempData["Message"] = "You need to be assigned to a church before adding activities. Please Contanct an administrator";
+
+                return View("Index");
+            }
+            var activities = await _context.ProgramActivities.ToListAsync();
+
+            return View(activities);
+        }
     }
 }
