@@ -38,13 +38,6 @@ namespace RccgWeb.Controllers
                 return View("Index");
             }
 
-            //if (!userHasChurch)
-            //{
-            //    TempData["Message"] = "You need to be assigned to a church before adding activities. Please Contanct an administrator";
-
-            //    return View("Index");
-            //}
-
             var activities = await _context.ProgramActivities
                     .Where(pa => pa.ChurchId == userHasChurch.ChurchId)
                     .OrderByDescending(pa => pa.DateTimeSubmitted) // Assuming there's a CreatedAt field
