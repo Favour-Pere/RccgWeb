@@ -139,6 +139,8 @@ namespace RccgWeb.Controllers
 
                 return View("Index");
             }
+
+
             var activities = await _context.ProgramActivities.ToListAsync();
 
             return View(activities);
