@@ -5,53 +5,76 @@
     ViewData["Title"] = "Program Activities";
     var userName = User.Identity?.Name ?? "User";
 }
+@if (!string.IsNullOrEmpty(message))
+{
+    <div class="alert alert-warning">@message</div>
+}
+else
+{
+    <div class="container mt-4">
+        <!-- Welcome Section -->
+        <div class="alert alert-primary text-center" role="alert">
+            <h2>Welcome, @userName!</h2>
+            <p class="mb-0">Manage and track your church program activities with ease.</p>
+        </div>
 
-<div class="container mt-4">
-    <div class="alert alert-primary text-center" role="alert">
-        <h2>Welcome, @userName!</h2>
-        <p class="mb-0">Manage and track your church program activities with ease.</p>
+        <!-- Dashboard Section -->
+        <div class="row g-4">
+            <!-- Add Activity Card -->
+            <div class="col-md-4">
+                <div class="card text-center shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Add a New Activity</h5>
+                        <p class="card-text">Click below to create a new program activity.</p>
+                        <a asp-controller="ProgramActivity" asp-action="Create" class="btn btn-primary">Add Activity</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activities Section -->
+            <div class="col-md-8">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        Recent Program Activities
+                    </div>
+                    <div class="card-body">
+                        @if (Model != null && Model.Any())
+                        {
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Name </th>
+                                            <th>Date</th>
+                                            <th>Minister</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var activity in Model)
+                                        {
+                                            <tr>
+                                                <td>@activity.ActivityName</td>
+                                                <td>@activity.DateCreated.ToString("MMM dd, yyyy")</td>
+                                                <td>@activity.PastorInCharge</td>
+                                                <td>
+                                                    <a asp-action="Details" asp-route-id="@activity.ProgramActivityId" class="btn btn-sm btn-outline-info">View</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                        else
+                        {
+                            <p class="text-muted text-center">No recent activities found.</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-</div>
 
-    @if (!string.IsNullOrEmpty(message))
-    {
-        <div class="alert alert-warning">@message</div>
-    }
-    else
-    {
-        <a asp-action="Create" class="btn btn-primary">Add Activity</a>
-        <h3>
-            History
-        </h3>
-
-        @if (Model.Any())
-        {
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Description</th>
-                        <th>Date</th>
-                        <th>Added By</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var activity in Model)
-                    {
-                        <tr>
-                            <td>@activity.ActivityName</td>
-                            <td>@activity.ActivityDescription</td>
-                            <td>@activity.DateCreated.ToString("dd MMM yyyy")</td>
-                            <td>@activity.PastorInCharge</td> <!-- Assuming you track who added it -->
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        }
-        else
-        {
-            <p class="text-muted">No program activities found for your church.</p>
-        }
-
-    }
+}
