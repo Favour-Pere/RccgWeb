@@ -4,65 +4,82 @@
     ViewData["Title"] = "Add Program Activity";
 }
 
-<h2>Add program activity</h2>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm rounded-3">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3 class="fw-bold mb-0">Add Program Activity</h3>
+                </div>
+                <div class="card-body p-4">
 
-@if (TempData["Error"] != null)
-{
-    <div class="alert alert-danger">@TempData["Error"]</div>
-}
-@if (TempData["Success"] != null)
-{
-    <div class="alert alert-success">@TempData["Success"]</div>
-}
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-danger">@TempData["Error"]</div>
+                    }
+                    @if (TempData["Success"] != null)
+                    {
+                        <div class="alert alert-success">@TempData["Success"]</div>
+                    }
 
-<form asp-action="Create" method="post">
-    <div class="form-group">
-        <label asp-for="ActivityName"></label>
-        <input asp-for="ActivityName" class="form-control" />
-        <span asp-validation-for="ActivityName" class="text-danger"></span>
+                    <form asp-action="Create" method="post">
+                        <div class="mb-3">
+                            <label asp-for="ActivityName" class="form-label fw-bold"></label>
+                            <input asp-for="ActivityName" class="form-control form-control-lg" placeholder="Enter Activity Name" />
+                            <span asp-validation-for="ActivityName" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="ActivityDescription" class="form-label fw-bold"></label>
+                            <textarea asp-for="ActivityDescription" class="form-control form-control-lg" rows="3" placeholder="Describe the activity"></textarea>
+                            <span asp-validation-for="ActivityDescription" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="DateCreated" class="form-label fw-bold"></label>
+                                <input asp-for="DateCreated" class="form-control form-control-lg" type="date" />
+                                <span asp-validation-for="DateCreated" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="PastorInCharge" class="form-label fw-bold"></label>
+                                <input asp-for="PastorInCharge" class="form-control form-control-lg" placeholder="Enter Pastor's Name" />
+                                <span asp-validation-for="PastorInCharge" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Offering" class="form-label fw-bold"></label>
+                                <input asp-for="Offering" class="form-control form-control-lg" type="number" step="0.01" placeholder="Enter Offering Amount" />
+                                <span asp-validation-for="Offering" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Tithe" class="form-label fw-bold"></label>
+                                <input asp-for="Tithe" class="form-control form-control-lg" type="number" step="0.01" placeholder="Enter Tithe Amount" />
+                                <span asp-validation-for="Tithe" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Attendance" class="form-label fw-bold"></label>
+                                <input asp-for="Attendance" class="form-control form-control-lg" type="number" placeholder="Enter Attendance" />
+                                <span asp-validation-for="Attendance" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="ActiveWorkers" class="form-label fw-bold"></label>
+                                <input asp-for="ActiveWorkers" class="form-control form-control-lg" type="number" placeholder="Enter Number of Workers" />
+                                <span asp-validation-for="ActiveWorkers" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg rounded-pill">Submit Activity</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <div>
-        <label asp-for="ActivityDescription"></label>
-        <input asp-for="ActivityDescription" class="form-control" />
-        <span asp-validation-for="ActivityDescription" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="DateCreated"></label>
-        <input asp-for="DateCreated" class="form-control" type="date" />
-        <span asp-validation-for="DateCreated" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Offering"></label>
-        <input asp-for="Offering" class="form-control" type="number" step="0.01" />
-        <span asp-validation-for="Offering" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Tithe"></label>
-        <input asp-for="Tithe" class="form-control" type="number" step="0.01" />
-        <span asp-validation-for="Tithe" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Attendance"></label>
-        <input asp-for="Attendance" class="form-control" type="number" />
-        <span asp-validation-for="Attendance" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="ActiveWorkers"></label>
-        <input asp-for="ActiveWorkers" class="form-control" type="number" />
-        <span asp-validation-for="ActiveWorkers" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="PastorInCharge"></label>
-        <input asp-for="PastorInCharge" class="form-control" />
-        <span asp-validation-for="PastorInCharge" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+</div>
