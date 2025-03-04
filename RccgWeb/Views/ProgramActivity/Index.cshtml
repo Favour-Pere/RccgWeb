@@ -5,83 +5,77 @@
     ViewData["Title"] = "Program Activities";
     var userName = User.Identity?.Name ?? "User";
 }
-@if (!string.IsNullOrEmpty(message))
-{
-    <div class="alert alert-warning">@message</div>
-}
-else
-{
-    <div class="container mt-4">
-        <!-- Welcome Section -->
-        <div class="alert alert-primary text-center" role="alert">
-            <h2>Welcome, @userName!</h2>
-            <p class="mb-0">Manage and track your church program activities with ease.</p>
-        </div>
 
-        <div class="card text-center shadow-sm">
-            <div class="card-body">
-                <h5 class="card-title">Your Assigned Church</h5>
-                <p><strong>Church Name:</strong> @Model.ChurchName</p>
-                <p><strong>Location:</strong> @Model.Location</p>
-                <p><strong>Date Created:</strong> @(Model.DateCreated?.ToString("MMM dd, yyyy") ?? "N/A")</p>
-            </div>
-        </div>
+<div class="container mt-5">
+    <!-- Welcome Section -->
+    <div class="alert alert-primary text-center shadow-sm rounded-3">
+        <h2 class="fw-bold">Welcome, @userName!</h2>
+        <p class="mb-0">Manage and track your church program activities with ease.</p>
+    </div>
 
-        <!-- Dashboard Section -->
-        <div class="row g-4">
-            <!-- Add Activity Card -->
-            <div class="col-md-4">
-                <div class="card text-center shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Add a New Activity</h5>
-                        <p class="card-text">Click below to create a new program activity.</p>
-                        <a asp-controller="ProgramActivity" asp-action="Create" class="btn btn-primary">Add Activity</a>
-                    </div>
+    <!-- Assigned Church Details -->
+    <div class="card shadow-sm mb-4 border-0 rounded-4">
+        <div class="card-body text-center">
+            <h5 class="card-title fw-bold text-primary">Your Assigned Church</h5>
+            <p><strong>Church Name:</strong> @Model.ChurchName</p>
+            <p><strong>Location:</strong> @Model.Location</p>
+            <p><strong>Date Created:</strong> @(Model.DateCreated?.ToString("MMM dd, yyyy") ?? "N/A")</p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Add Activity Card -->
+        <div class="col-md-4">
+            <div class="card text-center shadow-sm border-0 rounded-4">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">Add a New Activity</h5>
+                    <p class="card-text">Click below to create a new program activity.</p>
+                    <a asp-controller="ProgramActivity" asp-action="Create" class="btn btn-primary w-100 rounded-pill">Add Activity</a>
                 </div>
             </div>
+        </div>
 
-            <!-- Recent Activities Section -->
-            <div class="col-md-8">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-primary text-white">
-                        Recent Program Activities
-                    </div>
-                    <div class="card-body">
-                        @if (Model != null && Model.Activities.Any())
-                        {
-                            <div class="table-responsive">
-                                <table class="table table-striped">
-                                    <thead>
+        <!-- Recent Activities Section -->
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-header bg-primary text-white text-center fw-bold rounded-top-4">
+                    Recent Program Activities
+                </div>
+                <div class="card-body">
+                    @if (Model != null && Model.Activities.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Date</th>
+                                        <th>Minister</th>
+                                        <th class="text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var activity in Model.Activities)
+                                    {
                                         <tr>
-                                            <th>Name </th>
-                                            <th>Date</th>
-                                            <th>Minister</th>
-                                            <th>Actions</th>
+                                            <td>@activity.ActivityName</td>
+                                            <td>@activity.DateCreated.ToString("MMM dd, yyyy")</td>
+                                            <td>@activity.PastorInCharge</td>
+                                            <td class="text-center">
+                                                <a asp-action="Details" asp-route-id="@activity.ProgramActivityId" class="btn btn-sm btn-outline-primary rounded-pill">Details</a>
+                                            </td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var activity in Model.Activities)
-                                        {
-                                            <tr>
-                                                <td>@activity.ActivityName</td>
-                                                <td>@activity.DateCreated.ToString("MMM dd, yyyy")</td>
-                                                <td>@activity.PastorInCharge</td>
-                                                <td>
-                                                    <a asp-action="Details" asp-route-id="@activity.ProgramActivityId" class="btn btn-sm btn-outline-info">View</a>
-                                                </td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                        }
-                        else
-                        {
-                            <p class="text-muted text-center">No recent activities found.</p>
-                        }
-                    </div>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center">No recent activities found.</p>
+                    }
                 </div>
             </div>
         </div>
     </div>
-}
+</div>
