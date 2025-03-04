@@ -24,26 +24,52 @@ namespace RccgWeb.Controllers
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(User);
-            if (user is  null)
+            if (user is null)
             {
                 return RedirectToAction("Login", "Account");
             }
 
-            var userHasChurch = await _context.UserChurches.FirstOrDefaultAsync(uc => uc.UserId == user.Id.ToString());
+            var userChurch = await _context.UserChurches.FirstOrDefaultAsync(uc => uc.UserId == user.Id.ToString());
 
-            if (userHasChurch == null)
+            if (userChurch is null)
             {
-                TempData["Message"] = "You need to be assigned to a church before adding activities. Please Contanct an administrator";
+                TempData["Message"] = "You need to be assigned to a church before adding activities. Please contact an administrator";
+                return View("Index");
+            }
+            string churchId = userChurch.ChurchId;
 
+            // Retrieve Church Details from Zones, Areas, or Parishes
+            var churchDetails = await _context.Zones
+                .Where(z => z.ChurchId == churchId)
+                .Select(z => new ChurchDetailsViewModel { Name = z.ZoneName, Location = z.Location, DateCreated = z.DateCreated })
+                .Union(_context.Areas
+                    .Where(a => a.ChurchId == churchId)
+                    .Select(a => new ChurchDetailsViewModel { Name = a.AreaName, Location = a.Location, DateCreated = a.DateCreated }))
+                .Union(_context.Parishes
+                    .Where(p => p.ChurchId == churchId)
+                    .Select(p => new ChurchDetailsViewModel { Name = p.ParishName, Location = p.Location, DateCreated = p.DateCreated }))
+                .FirstOrDefaultAsync();
+
+            if (churchDetails is null)
+            {
+                TempData["Message"] = "You need to be assigned to a church before adding activities. Please contact an administrator";
                 return View("Index");
             }
 
             var activities = await _context.ProgramActivities
-                    .Where(pa => pa.ChurchId == userHasChurch.ChurchId)
-                    .OrderByDescending(pa => pa.DateTimeSubmitted) // Assuming there's a CreatedAt field
-                    .ToListAsync();
+                .Where(pa => pa.ChurchId == userChurch.ChurchId)
+                .OrderByDescending(pa => pa.DateTimeSubmitted)
+                .ToListAsync();
 
-            return View(activities);
+            var viewModel = new ActivityViewModel
+            {
+                ChurchName = churchDetails.Name,
+                Location = churchDetails.Location,
+                DateCreated = churchDetails.DateCreated,
+                Activities = activities
+            };
+
+            return View(viewModel);
         }
 
         public async Task<IActionResult> Create()
@@ -112,6 +138,5 @@ namespace RccgWeb.Controllers
 
             return RedirectToAction("Index");
         }
-
     }
 }
