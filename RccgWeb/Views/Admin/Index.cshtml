@@ -1,19 +1,117 @@
-﻿@model List<ProgramActivity>
+﻿@model RccgWeb.ViewModel.AdminDashboardViewModel
 
 @{
-    ViewData["Title"] = "User List";
+    ViewData["Title"] = "Admin Dashboard";
 }
 
 <div class="container mt-4">
-    <h2 class="text-center mb-4">Admin Panel</h2>
+    <h2 class="text-center mb-4">Admin Dashboard</h2>
 
     <div class="row g-4">
+        <!-- Metrics Section -->
+        <div class="col-md-12">
+            <div class="row text-center">
+                <div class="col-md-3">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">Total Users</h5>
+                            <p class="display-6">@Model.TotalUsers</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">Total Churches</h5>
+                            <p class="display-6">@(Model.Zones.Count + Model.Areas.Count + Model.Parishes.Count)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">Total Zones</h5>
+                            <p class="display-6">@Model.Zones.Count</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">Total Areas</h5>
+                            <p class="display-6">@Model.Areas.Count</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">Total Attendance</h5>
+                            <p class="display-6">@Model.TotalAttendance</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">Total Parishes</h5>
+                            <p class="display-6">@Model.Parishes.Count</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">Total Offerings</h5>
+                            <p class="display-6">@Model.TotalOfferings.ToString("C", new System.Globalization.CultureInfo("en-NG"))</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">Total Tithes</h5>
+                            <p class="display-6">@Model.TotalTithe.ToString("C", new System.Globalization.CultureInfo("en-NG"))</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row text-center mt-3">
+                <div class="col-md-4">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">Recent Growth Rate</h5>
+                            <p class="display-6">@Model.RecentGrowthRate%</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">Active Workers</h5>
+                            <p class="display-6">@Model.ActiveWorkers</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">Top Performing Church</h5>
+                            <p class="display-6">@Model.TopPerformingChurch</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mt-4">
         <!-- Add Zone -->
         <div class="col-md-4">
-            <div class="card shadow-sm">
-                <div class="card-body text-center">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
                     <h5 class="card-title">Add Zone</h5>
-                    <p class="card-text">Create a new church zone.</p>
+                    <p class="card-text">Create a new zone for the church.</p>
                     <a asp-controller="Zone" asp-action="AddZone" class="btn btn-primary">Add Zone</a>
                 </div>
             </div>
@@ -21,10 +119,10 @@
 
         <!-- Add Area -->
         <div class="col-md-4">
-            <div class="card shadow-sm">
-                <div class="card-body text-center">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
                     <h5 class="card-title">Add Area</h5>
-                    <p class="card-text">Create a new church area.</p>
+                    <p class="card-text">Create a new area within a zone.</p>
                     <a asp-controller="Area" asp-action="AddArea" class="btn btn-primary">Add Area</a>
                 </div>
             </div>
@@ -32,45 +130,90 @@
 
         <!-- Add Parish -->
         <div class="col-md-4">
-            <div class="card shadow-sm">
-                <div class="card-body text-center">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
                     <h5 class="card-title">Add Parish</h5>
-                    <p class="card-text">Create a new church parish.</p>
+                    <p class="card-text">Create a new parish within an area.</p>
                     <a asp-controller="Parish" asp-action="AddParish" class="btn btn-primary">Add Parish</a>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Assign/Unassign Church -->
+    <div class="row g-4 mt-4">
+        <!-- Assign & Unassign Church -->
         <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-body text-center">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
                     <h5 class="card-title">Manage Church Assignments</h5>
-                    <p class="card-text">Assign or remove users from churches.</p>
-                    <a asp-action="AssignChurch" class="btn btn-success me-2">Assign Church</a>
-                    <a asp-action="UnassignChurch" class="btn btn-danger">Remove Church</a>
+                    <p class="card-text">Assign or unassign users to churches.</p>
+                    <a asp-action="AssignChurch" class="btn btn-success">Assign Church</a>
+                    <a asp-action="UnassignChurch" class="btn btn-danger">Unassign Church</a>
                 </div>
             </div>
         </div>
 
-        <!-- View User List -->
+        <!-- View Users -->
         <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-body text-center">
-                    <h5 class="card-title">User List</h5>
-                    <p class="card-text">View and manage users.</p>
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">View Users</h5>
+                    <p class="card-text">See all registered users.</p>
                     <a asp-action="UserList" class="btn btn-info">View Users</a>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Recent Program Activities -->
-        <div class="col-12">
+    <div class="row g-4 mt-4">
+        <!-- View Zones -->
+        <div class="col-md-4">
             <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">Zones</div>
+                <ul class="list-group list-group-flush">
+                    @foreach (var zone in Model.Zones)
+                    {
+                        <li class="list-group-item">@zone.ZoneName</li>
+                    }
+                </ul>
+            </div>
+        </div>
+
+        <!-- View Areas -->
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-secondary text-white">Areas</div>
+                <ul class="list-group list-group-flush">
+                    @foreach (var area in Model.Areas)
+                    {
+                        <li class="list-group-item">@area.AreaName</li>
+                    }
+                </ul>
+            </div>
+        </div>
+
+        <!-- View Parishes -->
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">Parishes</div>
+                <ul class="list-group list-group-flush">
+                    @foreach (var parish in Model.Parishes)
+                    {
+                        <li class="list-group-item">@parish.ParishName</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mt-4">
+        <!-- Recent Activities -->
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">Recent Program Activities</div>
                 <div class="card-body">
-                    <h5 class="card-title">Recent Program Activities</h5>
-                    <p class="card-text">View the latest added program activities.</p>
-                    <div class="table-responsive">
+                    @if (Model.RecentActivities.Any())
+                    {
                         <table class="table table-striped">
                             <thead>
                                 <tr>
@@ -81,7 +224,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var activity in Model)
+                                @foreach (var activity in Model.RecentActivities)
                                 {
                                     <tr>
                                         <td>@activity.ActivityName</td>
@@ -94,7 +237,11 @@
                                 }
                             </tbody>
                         </table>
-                    </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center">No recent activities found.</p>
+                    }
                 </div>
             </div>
         </div>
