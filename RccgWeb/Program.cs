@@ -9,8 +9,6 @@ namespace RccgWeb
 {
     public class Program
     {
-       
-
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -24,7 +22,12 @@ namespace RccgWeb
             }
            );
 
-            builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(
+                options =>
+                {
+                    options.User.RequireUniqueEmail = true;
+                }
+                ).AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddScoped<IAreaService, AreaService>();
             builder.Services.AddScoped<IChurchAdminService, ChurchAdminService>();
             //builder.Services.AddDefaultIdentity<ApplicationUser>(
@@ -68,6 +71,7 @@ namespace RccgWeb
 
             app.Run();
         }
+
         public static void InitializeDatabase(IHost host)
         {
             using var scopee = host.Services.CreateScope();
