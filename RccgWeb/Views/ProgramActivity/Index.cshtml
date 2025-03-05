@@ -3,9 +3,14 @@
 @{
     var message = TempData["Message"] as string;
     ViewData["Title"] = "Program Activities";
-    var userName = User.Identity?.Name ?? "User";
-}
+    var userName = User.Identity?.Name ?? "User";}
 
+@if (!string.IsNullOrEmpty(message))
+{
+                <div class="alert alert-warning text-center shadow display-3">@message</div>
+}
+else
+{
 <div class="container mt-5">
     <!-- Welcome Section -->
     <div class="alert alert-primary text-center shadow-sm rounded-3">
@@ -79,3 +84,4 @@
         </div>
     </div>
 </div>
+}
