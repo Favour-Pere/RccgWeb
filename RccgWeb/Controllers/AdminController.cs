@@ -8,6 +8,7 @@ using RccgWeb.Models;
 using RccgWeb.Services;
 using RccgWeb.Services.Interfaces;
 using RccgWeb.ViewModel;
+using System.Collections.Immutable;
 using System.Linq;
 
 namespace RccgWeb.Controllers
@@ -46,8 +47,69 @@ namespace RccgWeb.Controllers
 
             var activities = await _context.ProgramActivities.ToListAsync();
 
-            return View(activities);
-            
+            var model = new AdminDashboardViewModel
+            {
+                TotalUsers = await _context.Users.CountAsync(),
+                Zones = await _context.Zones.ToListAsync(),
+                Areas = await _context.Areas.ToListAsync(),
+                Parishes = await _context.Parishes.ToListAsync(),
+                TotalAttendance = await _context.ProgramActivities.SumAsync(a => a.Attendance),
+                TotalOfferings = await _context.ProgramActivities.SumAsync(a =>  a.Offering),
+                ActiveWorkers = await _context.ProgramActivities.SumAsync(a => a.ActiveWorkers),
+                TotalTithe = await _context.ProgramActivities.SumAsync(a => a.Tithe),
+                RecentGrowthRate = await CalculateGrowthRate(),
+                TopPerformingChurch = await GetTopPerformingChurch(),
+                RecentActivities = activities
+            };
+            return View(model);     
+        }
+
+
+        private async Task<double> CalculateGrowthRate()
+        {
+            var currentMonth = DateTime.Now.Month;
+            var previousMonth = currentMonth == 1 ? 12 : currentMonth - 1;
+
+            var currentAttendance = await _context.ProgramActivities
+                .Where(a => a.DateTimeSubmitted.Month == currentMonth)
+                .SumAsync(a => a.Attendance);
+
+            var previousAttendance = await _context.ProgramActivities
+                .Where(a => a.DateTimeSubmitted.Month == previousMonth)
+                .SumAsync(a => a.Attendance);
+
+            if (previousAttendance == 0)
+                return 0; // Avoid division by zero
+
+            return ((double)(currentAttendance - previousAttendance) / previousAttendance) * 100;
+        }
+        private async Task<string> GetTopPerformingChurch()
+        {
+            // Get the ChurchId of the top-performing church
+            var topChurchId = await _context.ProgramActivities
+                .GroupBy(a => a.ChurchId)
+                .OrderByDescending(g => g.Sum(a => a.Attendance))
+                .Select(g => g.Key)
+                .FirstOrDefaultAsync();
+
+            if (topChurchId == null)
+                return "No Data";
+
+            // Fetch Church details from Zones, Areas, or Parishes
+            var topChurchDetails = await _context.Zones
+                .Where(z => z.ChurchId == topChurchId)
+                .Select(z => new { Name = z.ZoneName, Location = z.Location })
+                .Union(_context.Areas.Where(a => a.ChurchId == topChurchId)
+                    .Select(a => new { Name = a.AreaName, Location = a.Location }))
+                .Union(_context.Parishes.Where(p => p.ChurchId == topChurchId)
+                    .Select(p => new { Name = p.ParishName, Location = p.Location }))
+                .FirstOrDefaultAsync();
+
+            if (topChurchDetails == null)
+                return "Unknown Church";
+
+            // Return the church name and location
+            return $"{topChurchDetails.Name} ({topChurchDetails.Location})";
         }
 
         public async Task<IActionResult> UserList()
