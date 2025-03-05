@@ -29,6 +29,29 @@ namespace RccgWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            var user = await _userManager.GetUserAsync(User);
+            if (user is null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var userHasChurch = await _context.UserChurches.FirstOrDefaultAsync(uc => uc.UserId == user.Id.ToString());
+
+            if (userHasChurch == null)
+            {
+                TempData["Message"] = "You need to be assigned to a church before adding activities. Please Contanct an administrator";
+
+                return View("Index");
+            }
+
+            var activities = await _context.ProgramActivities.ToListAsync();
+
+            return View(activities);
+            
+        }
+
+        public async Task<IActionResult> UserList()
+        {
             var users = await _userManager.Users.ToListAsync();
 
             return View(users);
