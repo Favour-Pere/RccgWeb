@@ -24,24 +24,52 @@ namespace RccgWeb.Controllers
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(User);
-            if (user is not null)
-            {
-                var userHasChurch = await _context.UserChurches.AnyAsync(uc => uc.UserId == user.Id.ToString());
-
-                if (!userHasChurch)
-                {
-                    TempData["Message"] = "You need to be assigned to a church before adding activities. Please Contanct an administrator";
-
-                    return View("Index");
-                }
-            }
-            else
+            if (user is null)
             {
                 return RedirectToAction("Login", "Account");
             }
-            var activities = await _context.ProgramActivities.ToListAsync();
 
-            return View(activities);
+            var userChurch = await _context.UserChurches.FirstOrDefaultAsync(uc => uc.UserId == user.Id.ToString());
+
+            if (userChurch is null)
+            {
+                TempData["Message"] = "You need to be assigned to a church before adding activities. Please contact an administrator";
+                return View("Index");
+            }
+            string churchId = userChurch.ChurchId;
+
+            // Retrieve Church Details from Zones, Areas, or Parishes
+            var churchDetails = await _context.Zones
+                .Where(z => z.ChurchId == churchId)
+                .Select(z => new ChurchDetailsViewModel { Name = z.ZoneName, Location = z.Location, DateCreated = z.DateCreated })
+                .Union(_context.Areas
+                    .Where(a => a.ChurchId == churchId)
+                    .Select(a => new ChurchDetailsViewModel { Name = a.AreaName, Location = a.Location, DateCreated = a.DateCreated }))
+                .Union(_context.Parishes
+                    .Where(p => p.ChurchId == churchId)
+                    .Select(p => new ChurchDetailsViewModel { Name = p.ParishName, Location = p.Location, DateCreated = p.DateCreated }))
+                .FirstOrDefaultAsync();
+
+            if (churchDetails is null)
+            {
+                TempData["Message"] = "You need to be assigned to a church before adding activities. Please contact an administrator";
+                return View("Index");
+            }
+
+            var activities = await _context.ProgramActivities
+                .Where(pa => pa.ChurchId == userChurch.ChurchId)
+                .OrderByDescending(pa => pa.DateTimeSubmitted)
+                .ToListAsync();
+
+            var viewModel = new ActivityViewModel
+            {
+                ChurchName = churchDetails.Name,
+                Location = churchDetails.Location,
+                DateCreated = churchDetails.DateCreated,
+                Activities = activities
+            };
+
+            return View(viewModel);
         }
 
         public async Task<IActionResult> Create()
@@ -110,50 +138,5 @@ namespace RccgWeb.Controllers
 
             return RedirectToAction("Index");
         }
-
-        //[HttpPost]
-        //public async Task<IActionResult> AddActivity([FromBody] ProgramActivity programActivity)
-        //{
-        //    if (programActivity == null || string.IsNullOrEmpty(programActivity.ChurchId))
-        //    {
-        //        return BadRequest(new { message = "Invalid activity data. ChurchId is required." });
-        //    }
-
-        //    try
-        //    {
-        //        // Check for existing Zone, Area, or Parish with the given ChurchId
-        //        var existingChurch = await _context.Zones.AsNoTracking().FirstOrDefaultAsync(z => z.ChurchId == programActivity.ChurchId)
-        //                          ?? (object)await _context.Areas.AsNoTracking().FirstOrDefaultAsync(a => a.ChurchId == programActivity.ChurchId)
-        //                          ?? (object)await _context.Parishes.AsNoTracking().FirstOrDefaultAsync(p => p.ChurchId == programActivity.ChurchId);
-
-        //        if (existingChurch == null)
-        //        {
-        //            return NotFound(new { message = "No Zone, Area, or Parish found for the provided ChurchId." });
-        //        }
-
-        //        // Ensure DateCreated is properly set
-        //        if (programActivity.DateCreated == default)
-        //        {
-        //            programActivity.DateCreated = DateTime.Now;
-        //        }
-
-        //        _context.ProgramActivities.Add(programActivity);
-        //        await _context.SaveChangesAsync();
-
-        //        return Ok(new
-        //        {
-        //            message = "Program activity added successfully",
-        //            data = programActivity
-        //        });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, new
-        //        {
-        //            message = "An error occurred while adding the activity.",
-        //            error = ex.Message
-        //        });
-        //    }
-        //}
     }
 }

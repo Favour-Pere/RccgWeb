@@ -29,6 +29,29 @@ namespace RccgWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            var user = await _userManager.GetUserAsync(User);
+            if (user is null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var userHasChurch = await _context.UserChurches.FirstOrDefaultAsync(uc => uc.UserId == user.Id.ToString());
+
+            if (userHasChurch == null)
+            {
+                TempData["Message"] = "You need to be assigned to a church before adding activities. Please Contanct an administrator";
+
+                return View("Index");
+            }
+
+            var activities = await _context.ProgramActivities.ToListAsync();
+
+            return View(activities);
+            
+        }
+
+        public async Task<IActionResult> UserList()
+        {
             var users = await _userManager.Users.ToListAsync();
 
             return View(users);
@@ -43,18 +66,18 @@ namespace RccgWeb.Controllers
             {
                 Users = _context.Users
                     .Where(u => !assignedUserIds.Contains(u.Id)) // Fetch unassigned users
-                    .Select(u => new SelectListItem { Value = u.Id, Text = u.Email })
+                    .Select(u => new SelectListItem { Value = u.Id, Text = $"{u.Email} {u.FirstName} {u.LastName}" })
                     .ToList(),
 
                 Churches = _context.Zones
-                    .Where(z => !assignedChurchIds.Contains(z.ZoneId.ToString()))
-                    .Select(z => new SelectListItem { Value = z.ZoneId.ToString(), Text = z.ZoneName })
+                    .Where(z => !assignedChurchIds.Contains(z.ChurchId))
+                    .Select(z => new SelectListItem { Value = z.ChurchId, Text = z.ZoneName })
                     .Concat(_context.Areas
-                        .Where(a => !assignedChurchIds.Contains(a.AreaId.ToString()))
-                        .Select(a => new SelectListItem { Value = a.AreaId.ToString(), Text = a.AreaName }))
+                        .Where(a => !assignedChurchIds.Contains(a.ChurchId))
+                        .Select(a => new SelectListItem { Value = a.ChurchId, Text = a.AreaName }))
                     .Concat(_context.Parishes
-                        .Where(p => !assignedChurchIds.Contains(p.ParishId.ToString()))
-                        .Select(p => new SelectListItem { Value = p.ParishId.ToString(), Text = p.ParishName }))
+                        .Where(p => !assignedChurchIds.Contains(p.ChurchId))
+                        .Select(p => new SelectListItem { Value = p.ChurchId, Text = p.ParishName }))
                     .ToList()
             };
 
@@ -121,6 +144,28 @@ namespace RccgWeb.Controllers
             }
 
             return RedirectToAction("UnassignChurch");
+        }
+
+        public async Task<IActionResult> AllProgramActivity()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user is null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var userHasChurch = await _context.UserChurches.FirstOrDefaultAsync(uc => uc.UserId == user.Id.ToString());
+
+            if (userHasChurch == null)
+            {
+                TempData["Message"] = "You need to be assigned to a church before adding activities. Please Contanct an administrator";
+
+                return View("Index");
+            }
+
+            var activities = await _context.ProgramActivities.ToListAsync();
+
+            return View(activities);
         }
     }
 }

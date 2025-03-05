@@ -1,8 +1,31 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+<div class="container mt-5">
+    <!-- Hero Section -->
+    <div class="text-center py-5 bg-light rounded shadow">
+        <h1 class="display-4">Welcome to Church Management System</h1>
+        <p class="lead">Effortlessly manage church activities, assign users, and track program history.</p>
+        <div class="mt-4">
+            <a asp-controller="Account" asp-action="Login" class="btn btn-primary btn-lg me-2">Login</a>
+            <a asp-controller="Account" asp-action="Register" class="btn btn-outline-primary btn-lg">Register</a>
+        </div>
+    </div>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <!-- Application Description -->
+    <section class="mt-5">
+        <h2>About the Application</h2>
+        <p class="text-muted">This system is designed to help churches manage their activities effectively. Admins can assign users to churches, monitor program activities, and ensure smooth operations.</p>
+    </section>
+
+    <!-- Instructions Section -->
+    <section class="mt-5">
+        <h2>How to Use</h2>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">Register an account or log in if you already have one.</li>
+            <li class="list-group-item">Admins assign users to a church before they can add activities.</li>
+            <li class="list-group-item">Users can view and add program activities once assigned.</li>
+            <li class="list-group-item">Admins can manage church assignments and review program history.</li>
+        </ul>
+    </section>
 </div>

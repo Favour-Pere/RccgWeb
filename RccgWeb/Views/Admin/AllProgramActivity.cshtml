@@ -1,0 +1,30 @@
+﻿@model List<ProgramActivity>
+
+@if (Model.Any())
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Date</th>
+                <th>Added By</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var activity in Model)
+            {
+                <tr>
+                    <td>@activity.ActivityName</td>
+                    <td>@activity.ActivityDescription</td>
+                    <td>@activity.DateCreated.ToString("dd MMM yyyy")</td>
+                    <td>@activity.PastorInCharge</td> <!-- Assuming you track who added it -->
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p class="text-muted">No program activities found for your church.</p>
+}
