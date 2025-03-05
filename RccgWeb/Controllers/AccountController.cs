@@ -45,7 +45,6 @@ namespace RccgWeb.Controllers
                 {
                     return RedirectToAction("Index", "ProgramActivity");
                 }
-
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
@@ -73,7 +72,6 @@ namespace RccgWeb.Controllers
                 {
                     return RedirectToAction("Index", "ProgramActivity");
                 }
-
                 ModelState.AddModelError("", "Invalid login attempt");
             }
 
