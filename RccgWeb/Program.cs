@@ -70,6 +70,8 @@ namespace RccgWeb
                 .WithStaticAssets();
 
             app.Run();
+
+            // weekly basis plot a graph
         }
 
         public static void InitializeDatabase(IHost host)
