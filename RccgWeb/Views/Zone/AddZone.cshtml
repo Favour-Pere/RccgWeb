@@ -1,29 +1,35 @@
 ﻿@model RccgWeb.ViewModel.ZoneViewModel
 
-<h2>
-    Add Zone
-</h2>
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow-lg border-0 rounded p-4" style="width: 400px;">
+        <div class="card-header bg-success text-white text-center">
+            <h4 class="mb-0">Add Zone</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="AddZone" method="post">
+                <div class="mb-3">
+                    <label asp-for="ZoneName" class="form-label fw-bold"></label>
+                    <input asp-for="ZoneName" class="form-control" />
+                    <span asp-validation-for="ZoneName" class="text-danger"></span>
+                </div>
 
-<form asp-action="AddZone" method="post">
-    <div class="form-group">
-        <label asp-for="ZoneName"></label>
-        <input asp-for="ZoneName" class="form-control" />
-        <span asp-validation-for="ZoneName" class="text-danger"></span>
+                <div class="mb-3">
+                    <label asp-for="ZonePastor" class="form-label fw-bold"></label>
+                    <input asp-for="ZonePastor" class="form-control" />
+                    <span asp-validation-for="ZonePastor" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Location" class="form-label fw-bold"></label>
+                    <input asp-for="Location" class="form-control" />
+                    <span asp-validation-for="Location" class="text-danger"></span>
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success px-4">Add Zone</button>
+                    <a asp-action="Index" class="btn btn-secondary ms-2">Back to List</a>
+                </div>
+            </form>
+        </div>
     </div>
-
-    <div class="form-group">
-        <label asp-for="ZonePastor"></label>
-        <input asp-for="ZonePastor" class="form-control" />
-        <span asp-validation-for="ZonePastor" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Location"></label>
-        <input asp-for="Location" class="form-control" />
-        <span asp-validation-for="Location" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-success">Add Zone</button>
-</form>
-
-<a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>

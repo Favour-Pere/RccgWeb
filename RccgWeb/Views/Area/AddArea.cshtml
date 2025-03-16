@@ -1,33 +1,43 @@
 ﻿@model RccgWeb.ViewModel.AreaViewModel
 
-<h2>Add Area</h2>
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow-lg border-0 rounded p-4" style="width: 400px;">
+        <div class="card-header bg-primary text-white text-center">
+            <h4 class="mb-0">Add Area</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="AddArea" method="post">
+                <div class="mb-3">
+                    <label asp-for="AreaName" class="form-label fw-bold">Area Name</label>
+                    <input asp-for="AreaName" class="form-control" placeholder="Enter area name" />
+                    <span asp-validation-for="AreaName" class="text-danger"></span>
+                </div>
 
-<form asp-action="AddArea" method="post">
-    <div class="form-group">
-        <label asp-for="AreaName">Area Name</label>
-        <input asp-for="AreaName" class="form-control" />
-        <span asp-validation-for="AreaName" class="text-danger"></span>
+                <div class="mb-3">
+                    <label asp-for="AreaPastor" class="form-label fw-bold">Area Pastor</label>
+                    <input asp-for="AreaPastor" class="form-control" placeholder="Enter pastor's name" />
+                    <span asp-validation-for="AreaPastor" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Location" class="form-label fw-bold">Location</label>
+                    <input asp-for="Location" class="form-control" placeholder="Enter location" />
+                    <span asp-validation-for="Location" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="ZoneId" class="form-label fw-bold">Select Zone</label>
+                    <select asp-for="ZoneId" asp-items="Model.Zones" class="form-select">
+                        <option value="">-- Select a Zone --</option>
+                    </select>
+                    <span asp-validation-for="ZoneId" class="text-danger"></span>
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary px-4">Add Area</button>
+                    <a asp-action="Index" class="btn btn-secondary ms-2">Back to List</a>
+                </div>
+            </form>
+        </div>
     </div>
-
-    <div class="form-group">
-        <label asp-for="AreaPastor">Area Pastor</label>
-        <input asp-for="AreaPastor" class="form-control" />
-        <span asp-validation-for="AreaPastor" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Location">Location</label>
-        <input asp-for="Location" class="form-control" />
-        <span asp-validation-for="Location" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="ZoneId">Select Zone</label>
-        <select asp-for="ZoneId" asp-items="Model.Zones" class="form-control">
-            <option value="">-- Select a Zone --</option>
-        </select>
-        <span asp-validation-for="ZoneId" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Add Area</button>
-</form>
+</div>

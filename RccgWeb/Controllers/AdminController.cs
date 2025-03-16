@@ -54,16 +54,15 @@ namespace RccgWeb.Controllers
                 Areas = await _context.Areas.ToListAsync(),
                 Parishes = await _context.Parishes.ToListAsync(),
                 TotalAttendance = await _context.ProgramActivities.SumAsync(a => a.Attendance),
-                TotalOfferings = await _context.ProgramActivities.SumAsync(a =>  a.Offering),
+                TotalOfferings = await _context.ProgramActivities.SumAsync(a => a.Offering),
                 ActiveWorkers = await _context.ProgramActivities.SumAsync(a => a.ActiveWorkers),
                 TotalTithe = await _context.ProgramActivities.SumAsync(a => a.Tithe),
                 RecentGrowthRate = await CalculateGrowthRate(),
                 TopPerformingChurch = await GetTopPerformingChurch(),
                 RecentActivities = activities
             };
-            return View(model);     
+            return View(model);
         }
-
 
         private async Task<double> CalculateGrowthRate()
         {
@@ -83,6 +82,7 @@ namespace RccgWeb.Controllers
 
             return ((double)(currentAttendance - previousAttendance) / previousAttendance) * 100;
         }
+
         private async Task<string> GetTopPerformingChurch()
         {
             // Get the ChurchId of the top-performing church

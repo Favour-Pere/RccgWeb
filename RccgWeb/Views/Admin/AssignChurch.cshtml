@@ -1,26 +1,38 @@
 ﻿@model RccgWeb.ViewModel.ChurchAssignmentViewModel
 
-<h2>Assign Church</h2>
-<form asp-action="AssignChurch" method="post">
-    <div class="form-group">
-        <label>User</label>
-        <select name="UserId" class="form-control">
-            @foreach (var user in Model.Users)
-            {
-                <option value="@user.Value">@user.Text</option>
-            }
-        </select>
-    </div>
+<div class="container mt-4">
+    <div class="card shadow-sm border-0 rounded">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Assign Church</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="AssignChurch" method="post">
+                <div class="mb-3">
+                    <label for="UserId" class="form-label fw-bold">User</label>
+                    <select id="UserId" name="UserId" class="form-select">
+                        <option value="">Select User</option>
+                        @foreach (var user in Model.Users)
+                        {
+                            <option value="@user.Value">@user.Text</option>
+                        }
+                    </select>
+                </div>
 
-    <div class="form-group">
-        <label>Church</label>
-        <select name="ChurchId" class="form-control">
-            @foreach (var church in Model.Churches)
-            {
-                <option value="@church.Value">@church.Text</option>
-            }
-        </select>
-    </div>
+                <div class="mb-3">
+                    <label for="ChurchId" class="form-label fw-bold">Church</label>
+                    <select id="ChurchId" name="ChurchId" class="form-select">
+                        <option value="">Select Church</option>
+                        @foreach (var church in Model.Churches)
+                        {
+                            <option value="@church.Value">@church.Text</option>
+                        }
+                    </select>
+                </div>
 
-    <button type="submit" class="btn btn-primary">Assign</button>
-</form>
+                <div class="text-end">
+                    <button type="submit" class="btn btn-primary px-4">Assign</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
