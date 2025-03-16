@@ -4,13 +4,14 @@
     ViewData["Title"] = "User List";
 }
 
-<h2>User List</h2>
+<h2>Manage Users</h2>
 
 <table class="table">
     <thead>
         <tr>
             <th>Email</th>
-            <th>Church Assigned</th>
+            <th>Name</th>
+            <th>Phone</th>
             <th>Action</th>
         </tr>
     </thead>
@@ -19,9 +20,10 @@
         {
             <tr>
                 <td>@user.Email</td>
-                <td></td>
+                <td>@user.FirstName @user.LastName</td>
+                <td>@user.PhoneNumber</td>
                 <td>
-                    <a asp-action="AssignChurch" asp-route-id="@user.Id" class="btn btn-primary">Assign Church</a>
+                    <a asp-action="Delete" asp-route-id="@user.Id" class="btn btn-danger"> Delete User</a>
                 </td>
             </tr>
         }
