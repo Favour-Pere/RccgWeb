@@ -1,22 +1,33 @@
 ﻿@model RccgWeb.ViewModel.UnassignedChurchViewModel
 
-<h2>Unassign User from Church</h2>
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-danger text-white">
+            <h4 class="mb-0 text-center">Unassign User from Church</h4>
+        </div>
+        <div class="card-body">
+            @if (TempData["SuccessMessage"] is not null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    @TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
 
-@if (TempData["SuccessMessage"] is not null)
-{
-    <div class="alert alert-success">
-        @TempData["SuccessMessage"]
+            <form asp-action="UnassignChurch" asp-controller="Admin" method="post">
+                <div class="mb-3">
+                    <label for="SelectedUserId" class="form-label fw-bold">Select User</label>
+                    <select asp-for="SelectedUserId" asp-items="Model.AssignedUsers" class="form-select">
+                        <option value="">-- Select User --</option>
+                    </select>
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-danger px-4">
+                        <i class="bi bi-person-x"></i> Remove Church
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
-}
-
-<form asp-action="UnassignChurch" asp-controller="Admin" method="post">
-    <div class="form-group">
-        <label>Select User</label>
-
-        <select asp-for="SelectedUserId" asp-items="Model.AssignedUsers" class="form-control">
-            <option value="">-- Select User --</option>
-        </select>
-    </div>
-
-    <button type="submit" class="btn btn-danger">Remove Church</button>
-</form>
+</div>

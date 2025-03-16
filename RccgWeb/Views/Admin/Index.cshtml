@@ -7,104 +7,6 @@
 <div class="container mt-4">
     <h2 class="text-center mb-4">Admin Dashboard</h2>
 
-    <div class="row g-4">
-        <!-- Metrics Section -->
-        <div class="col-md-12">
-            <div class="row text-center">
-                <div class="col-md-3">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">Total Users</h5>
-                            <p class="display-6">@Model.TotalUsers</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">Total Churches</h5>
-                            <p class="display-6">@(Model.Zones.Count + Model.Areas.Count + Model.Parishes.Count)</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">Total Zones</h5>
-                            <p class="display-6">@Model.Zones.Count</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">Total Areas</h5>
-                            <p class="display-6">@Model.Areas.Count</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">Total Attendance</h5>
-                            <p class="display-6">@Model.TotalAttendance</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">Total Parishes</h5>
-                            <p class="display-6">@Model.Parishes.Count</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">Total Offerings</h5>
-                            <p class="display-6">@Model.TotalOfferings.ToString("C", new System.Globalization.CultureInfo("en-NG"))</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">Total Tithes</h5>
-                            <p class="display-6">@Model.TotalTithe.ToString("C", new System.Globalization.CultureInfo("en-NG"))</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row text-center mt-3">
-                <div class="col-md-4">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">Recent Growth Rate</h5>
-                            <p class="display-6">@Model.RecentGrowthRate%</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">Active Workers</h5>
-                            <p class="display-6">@Model.ActiveWorkers</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">Top Performing Church</h5>
-                            <p class="display-6">@Model.TopPerformingChurch</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div class="row g-4 mt-4">
         <!-- Add Zone -->
         <div class="col-md-4">
@@ -157,7 +59,7 @@
         <div class="col-md-6">
             <div class="card text-center shadow-sm">
                 <div class="card-body">
-                    <h5 class="card-title">View Users</h5>
+                    <h5 class="card-title">Manage Users</h5>
                     <p class="card-text">See all registered users.</p>
                     <a asp-action="UserList" class="btn btn-info">View Users</a>
                 </div>
