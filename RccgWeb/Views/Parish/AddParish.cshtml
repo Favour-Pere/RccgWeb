@@ -1,28 +1,43 @@
 ﻿@model RccgWeb.ViewModel.ParishViewModel
 
-<h2>Add Parish</h2>
+    <div class="container d-flex justify-content-center align-items-center vh-100">
+        <div class="card shadow-lg border-0 rounded p-4" style="width: 400px;">
+            <div class="card-header bg-primary text-white text-center">
+                <h4 class="mb-0">Add Parish</h4>
+            </div>
+            <div class="card-body">
+                <form asp-action="AddParish" method="post">
+                    <div class="mb-3">
+                        <label asp-for="ParishName" class="form-label fw-bold">Parish Name</label>
+                        <input asp-for="ParishName" class="form-control" placeholder="Enter parish name" />
+                        <span asp-validation-for="ParishName" class="text-danger"></span>
+                    </div>
 
-<form asp-action="AddParish" method="post">
-    <div>
-        <label>Parish Name</label>
-        <input asp-for="ParishName" class="form-control" />
-    </div>
+                    <div class="mb-3">
+                        <label asp-for="ParishPastor" class="form-label fw-bold">Parish Pastor</label>
+                        <input asp-for="ParishPastor" class="form-control" placeholder="Enter pastor's name" />
+                        <span asp-validation-for="ParishPastor" class="text-danger"></span>
+                    </div>
 
-    <div>
-        <label>
-            Parish Pastor
-        </label>
-        <input asp-for="ParishPastor" class="form-control" />
-    </div>
+                    <div class="mb-3">
+                        <label asp-for="Location" class="form-label fw-bold">Location</label>
+                        <input asp-for="Location" class="form-control" placeholder="Enter location" />
+                        <span asp-validation-for="Location" class="text-danger"></span>
+                    </div>
 
-    <div>
-        <label>Location</label>
-        <input asp-for="Location" class="form-control" />
-    </div>
+                    <div class="mb-3">
+                        <label asp-for="AreaId" class="form-label fw-bold">Select Area</label>
+                        <select asp-for="AreaId" asp-items="Model.Areas" class="form-select" id="areaDropdown">
+                            <option value="">-- Select an Area --</option>
+                        </select>
+                        <span asp-validation-for="AreaId" class="text-danger"></span>
+                    </div>
 
-    <div>
-        <label>Select Area</label>
-        <select asp-for="AreaId" asp-items="Model.Areas" class="form-control" id="areaDropdown"></select>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary px-4">Add Parish</button>
+                        <a asp-action="Index" class="btn btn-secondary ms-2">Back to List</a>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-    <button type="submit" class="btn btn-primary">Add Parish</button>
-</form>
