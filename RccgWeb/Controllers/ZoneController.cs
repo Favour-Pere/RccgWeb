@@ -57,9 +57,9 @@ namespace RccgWeb.Controllers
             return View(zoneViewModel);
         }
 
-        public async Task<IActionResult> Details(Guid id)
+        public async Task<IActionResult> Details(string id)
         {
-            var zone = await _context.Zones.FirstOrDefaultAsync(z => z.ZoneId == id);
+            var zone = await _context.Zones.FirstOrDefaultAsync(z => z.ChurchId == id);
 
             if (zone == null)
             {
