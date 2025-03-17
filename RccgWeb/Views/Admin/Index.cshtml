@@ -4,69 +4,8 @@
     ViewData["Title"] = "Admin Dashboard";
 }
 
-<div class="container mt-4">
-    <h2 class="text-center mb-4">Admin Dashboard</h2>
-
-    <div class="row g-4 mt-4">
-        <!-- Add Zone -->
-        <div class="col-md-4">
-            <div class="card text-center shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">Add Zone</h5>
-                    <p class="card-text">Create a new zone for the church.</p>
-                    <a asp-controller="Zone" asp-action="AddZone" class="btn btn-primary">Add Zone</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Add Area -->
-        <div class="col-md-4">
-            <div class="card text-center shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">Add Area</h5>
-                    <p class="card-text">Create a new area within a zone.</p>
-                    <a asp-controller="Area" asp-action="AddArea" class="btn btn-primary">Add Area</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Add Parish -->
-        <div class="col-md-4">
-            <div class="card text-center shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">Add Parish</h5>
-                    <p class="card-text">Create a new parish within an area.</p>
-                    <a asp-controller="Parish" asp-action="AddParish" class="btn btn-primary">Add Parish</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row g-4 mt-4">
-        <!-- Assign & Unassign Church -->
-        <div class="col-md-6">
-            <div class="card text-center shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">Manage Church Assignments</h5>
-                    <p class="card-text">Assign or unassign users to churches.</p>
-                    <a asp-action="AssignChurch" class="btn btn-success">Assign Church</a>
-                    <a asp-action="UnassignChurch" class="btn btn-danger">Unassign Church</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- View Users -->
-        <div class="col-md-6">
-            <div class="card text-center shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">Manage Users</h5>
-                    <p class="card-text">See all registered users.</p>
-                    <a asp-action="UserList" class="btn btn-info">View Users</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
+<div class="container mt-4 p-5">
+    <h2 class="text-center display-2 mb-4">Dashboard</h2>
     <div class="row g-4 mt-4">
         <!-- View Zones -->
         <div class="col-md-4">
@@ -107,45 +46,66 @@
             </div>
         </div>
     </div>
-
-    <div class="row g-4 mt-4">
-        <!-- Recent Activities -->
-        <div class="col-md-12">
-            <div class="card shadow-sm">
-                <div class="card-header bg-dark text-white">Recent Program Activities</div>
+    <div class="shadow-lg p-4 row g-4 mt-4">
+        <h5 class="display-5 text-center card-header">Manage Church</h5>
+        <!-- Add Zone -->
+        <div class="col-md-4">
+            <div class="card text-center shadow-sm">
                 <div class="card-body">
-                    @if (Model.RecentActivities.Any())
-                    {
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Date</th>
-                                    <th>Minister</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var activity in Model.RecentActivities)
-                                {
-                                    <tr>
-                                        <td>@activity.ActivityName</td>
-                                        <td>@activity.DateCreated.ToString("MMM dd, yyyy")</td>
-                                        <td>@activity.PastorInCharge</td>
-                                        <td>
-                                            <a asp-action="Details" asp-route-id="@activity.ProgramActivityId" class="btn btn-sm btn-outline-info">View</a>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    }
-                    else
-                    {
-                        <p class="text-muted text-center">No recent activities found.</p>
-                    }
+                    <h5 class="card-title display-6">Add Zone</h5>
+                    <p class="card-text">Create a new zone for the church.</p>
+                    <a asp-controller="Zone" asp-action="AddZone" class="btn btn-primary">Add Zone</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Area -->
+        <div class="col-md-4">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title display-6">Add Area</h5>
+                    <p class="card-text">Create a new area within a zone.</p>
+                    <a asp-controller="Area" asp-action="AddArea" class="btn btn-primary">Add Area</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Parish -->
+        <div class="col-md-4">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title display-6">Add Parish</h5>
+                    <p class="card-text">Create a new parish within an area.</p>
+                    <a asp-controller="Parish" asp-action="AddParish" class="btn btn-primary">Add Parish</a>
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="row g-4 mt-4">
+        <!-- Assign & Unassign Church -->
+        <div class="col-md-6">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Manage Church Assignments</h5>
+                    <p class="card-text">Assign or unassign users to churches.</p>
+                    <a asp-action="AssignChurch" class="btn btn-success">Assign Church</a>
+                    <a asp-action="UnassignChurch" class="btn btn-danger">Unassign Church</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- View Users -->
+        <div class="col-md-6">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Manage Users</h5>
+                    <p class="card-text">See all registered users.</p>
+                    <a asp-action="UserList" class="btn btn-info">View Users</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 </div>
