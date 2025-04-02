@@ -4,22 +4,16 @@ namespace RccgWeb.Services.Interfaces
 {
     public interface IProgramActivityService
     {
-        Task<ProgramActivity> AddProgramActivityAsync(ProgramActivity programActivity);
+        Task<decimal> GetTotalOfferingAsync(string churchId);
 
-        Task<ProgramActivity> GetProgramActivityByIdAsync(Guid id);
+        Task<decimal> GetTotalTitheAsync(string churchId);
 
-        Task<IEnumerable<ProgramActivity>> GetProgramActivitiesByChurchIdAsync(string churchId);
+        Task<int> GetTotalAttendanceAsync(string churchId);
 
-        Task<bool> DeleteProgramActivityAsync(Guid id);
+        Task<int> GetActiveWorkersAsync(string churchId);
 
-        Task<IEnumerable<decimal>> GetAllTitheAsync();
+        Task<decimal> GetMonthlyOfferingAsync(string churchId, int year, int month);
 
-        Task<IEnumerable<decimal>> GetAllOfferingAsync();
-
-        Task<decimal> GetSumOfAllOfferingAsync();
-
-        Task<decimal> GetSumOfAllTitheAsync();
-
-        Task<decimal> GetSumOfOfferingByDateAsync(DateTime date);
+        Task<decimal> GetGrowthRateAsync(string churchId);
     }
 }

@@ -39,6 +39,7 @@ namespace RccgWeb.Models
         public string PastorInCharge { get; set; } = string.Empty;
 
         [BindProperty]
-        public string? ChurchId { get; set; }
+        [Required]
+        public string ChurchId { get; set; } = string.Empty;
     }
 }
