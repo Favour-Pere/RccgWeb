@@ -19,12 +19,14 @@ namespace RccgWeb.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext _context;
         private readonly IChurchAdminService _churchAdminService;
+        private readonly IProgramActivityService _programActivityService;
 
-        public AdminController(UserManager<ApplicationUser> userManager, ApplicationDbContext context, IChurchAdminService churchAdminService)
+        public AdminController(UserManager<ApplicationUser> userManager, ApplicationDbContext context, IChurchAdminService churchAdminService, IProgramActivityService)
         {
             _userManager = userManager;
             _context = context;
             _churchAdminService = churchAdminService;
+            _programActi
         }
 
         [HttpGet]
