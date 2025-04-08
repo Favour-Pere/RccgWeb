@@ -14,7 +14,8 @@
                 <ul class="list-group list-group-flush">
                     @foreach (var zone in Model.Zones)
                     {
-                        <li class="list-group-item">@zone.ZoneName</li>
+                        <a asp-action="ChurchDetails" asp-route-id="@zone.ChurchId">
+                        <li class="list-group-item">@zone.ZoneName</li></a>
                     }
                 </ul>
             </div>
@@ -106,6 +107,4 @@
             </div>
         </div>
     </div>
-
-
 </div>

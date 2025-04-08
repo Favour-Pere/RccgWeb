@@ -30,6 +30,7 @@ namespace RccgWeb
                 ).AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddScoped<IAreaService, AreaService>();
             builder.Services.AddScoped<IChurchAdminService, ChurchAdminService>();
+            builder.Services.AddScoped<IProgramActivityService, ProgramActivityService>();
             //builder.Services.AddDefaultIdentity<ApplicationUser>(
             //    options =>
             //    {

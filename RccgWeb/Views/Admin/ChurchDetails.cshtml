@@ -1,0 +1,57 @@
+@model RccgWeb.ViewModel.ChurchStatsViewModel
+
+@{
+    ViewData["Title"] = "Church Details";
+}
+
+<h2>@Model.ChurchName - @Model.Year</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <canvas id="offeringChart"></canvas>
+    </div>
+    <div class="col-md-6">
+        <canvas id="titheChart"></canvas>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <canvas id="attendanceChart"></canvas>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const labels = @Html.Raw(Json.Serialize(Model.MonthlyOfferings.Keys));
+
+        const offeringData = {
+            labels: labels,
+            datasets: [{
+                label: 'Monthly Offering',
+                data: @Html.Raw(Json.Serialize(Model.MonthlyOfferings.Values)),
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        };
+
+        new Chart(document.getElementById('offeringChart'), {
+            type: 'bar',
+            data: offeringData,
+            options: { responsive: true, scales: { y: { beginAtZero: true } } }
+        });
+
+        new Chart(document.getElementById('titheChart'), {
+            type: 'bar',
+            data: titheData,
+            options: { responsive: true, scales: { y: { beginAtZero: true } } }
+        });
+
+        new Chart(document.getElementById('attendanceChart'), {
+            type: 'line',
+            data: attendanceData,
+            options: { responsive: true, scales: { y: { beginAtZero: true } } }
+        });
+    </script>
+}

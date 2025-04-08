@@ -19,12 +19,14 @@ namespace RccgWeb.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext _context;
         private readonly IChurchAdminService _churchAdminService;
+        private readonly IProgramActivityService _programActivityService;
 
-        public AdminController(UserManager<ApplicationUser> userManager, ApplicationDbContext context, IChurchAdminService churchAdminService)
+        public AdminController(UserManager<ApplicationUser> userManager, ApplicationDbContext context, IChurchAdminService churchAdminService, IProgramActivityService programActivityService)
         {
             _userManager = userManager;
             _context = context;
             _churchAdminService = churchAdminService;
+            _programActivityService = programActivityService;
         }
 
         [HttpGet]
@@ -228,6 +230,31 @@ namespace RccgWeb.Controllers
             var activities = await _context.ProgramActivities.ToListAsync();
 
             return View(activities);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ChurchDetails(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return BadRequest("Church ID is required.");
+            }
+
+            var currentYear = DateTime.Now.Year;
+
+            var currentMonth = DateTime.Now.Month;
+
+            var stats = new ChurchStatsViewModel
+            {
+                ChurchId = id,
+                ChurchName = "Test Church",
+                Year = currentYear,
+                Month = currentMonth,
+
+                MonthlyOfferings = await _programActivityService.GetMonthlyOfferingBreakdownAsync(id, currentYear),
+            };
+
+            return View(stats); // Return the view with the stats model
         }
     }
 }

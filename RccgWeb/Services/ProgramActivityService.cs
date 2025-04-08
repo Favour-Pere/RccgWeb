@@ -33,12 +33,30 @@ namespace RccgWeb.Services
                 return 0;
             }
 
-            return ((currentMonthOffering - previousMonthOffering) / previousMonthOffering) * 100;
+            return (currentMonthOffering - previousMonthOffering) / previousMonthOffering * 100;
         }
 
         public async Task<decimal> GetMonthlyOfferingAsync(string churchId, int year, int month)
         {
             return await _context.ProgramActivities.Where(a => a.ChurchId == churchId && a.DateTimeSubmitted.Year == year && a.DateTimeSubmitted.Month == month).SumAsync(a => a.Offering);
+        }
+
+        public async Task<Dictionary<string, decimal>> GetMonthlyOfferingBreakdownAsync(string churchId, int year)
+        {
+            var startDate = new DateTime(year, 1, 1);
+            var endDate = new DateTime(year + 1, 1, 1);
+
+            var data = await _context.ProgramActivities
+                .Where(a => a.ChurchId == churchId && a.DateTimeSubmitted >= startDate && a.DateTimeSubmitted < endDate)
+                .ToListAsync(); // Pull into memory
+
+            return data
+                .GroupBy(a => a.DateTimeSubmitted.Month)
+                .OrderBy(g => g.Key)
+                .ToDictionary(
+                    g => new DateTime(year, g.Key, 1).ToString("MMMM"),
+                    g => g.Sum(a => a.Offering)
+                );
         }
 
         public async Task<int> GetTotalAttendanceAsync(string churchId)
