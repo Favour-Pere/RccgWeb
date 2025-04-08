@@ -12,7 +12,7 @@ namespace RccgWeb.Services.Interfaces
 
         Task<int> GetActiveWorkersAsync(string churchId);
 
-        Task<decimal> GetMonthlyOfferingAsync(string churchId, int year, int month);
+        Task<Dictionary<string, decimal>> GetMonthlyOfferingBreakdownAsync(string churchId, int year);
 
         Task<decimal> GetGrowthRateAsync(string churchId);
     }
