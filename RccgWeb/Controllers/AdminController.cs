@@ -247,11 +247,13 @@ namespace RccgWeb.Controllers
             var stats = new ChurchStatsViewModel
             {
                 ChurchId = id,
-                ChurchName = "Test Church",
+                ChurchName = ,
                 Year = currentYear,
                 Month = currentMonth,
 
                 MonthlyOfferings = await _programActivityService.GetMonthlyOfferingBreakdownAsync(id, currentYear),
+                MonthlyTithes = await _programActivityService.GetMonthlyTithesBreakdownAsync(id, currentYear),
+                MonthlyAttendance = await _programActivityService.GetMonthlyAttendanceBreakdownAsync(id, currentYear)
             };
 
             return View(stats); // Return the view with the stats model
