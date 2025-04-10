@@ -70,6 +70,17 @@ namespace RccgWeb.Services
             return data.GroupBy(a => a.DateTimeSubmitted.Month).OrderBy(g => g.Key).ToDictionary(g => new DateTime(year, g.Key, 1).ToString("MMMM"), g => g.Sum(a => a.Tithe));
         }
 
+        public async Task<Dictionary<string, int>> GetMonthlyAttendanceBreakdownAsync(string churchId, int year)
+        {
+            var startDate = new DateTime(year, 1, 1);
+            var endDate = new DateTime(year + 1, 1, 1);
+
+            var data = await _context.ProgramActivities
+                .Where(a => a.ChurchId == churchId && a.DateTimeSubmitted >= startDate && a.DateTimeSubmitted < endDate).ToListAsync();
+
+            return data.GroupBy(a => a.DateTimeSubmitted.Month).OrderBy(g => g.Key).ToDictionary(g => new DateTime(year, g.Key, 1).ToString("MMMM"), g => g.Sum(a => a.Attendance));
+        }
+
         public async Task<int> GetTotalAttendanceAsync(string churchId)
         {
             return await _context.ProgramActivities.Where(a => a.ChurchId == churchId).SumAsync(a => a.Attendance);
