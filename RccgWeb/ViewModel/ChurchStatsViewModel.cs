@@ -11,8 +11,6 @@ public class ChurchStatsViewModel
     public Dictionary<string, decimal> MonthlyTithes { get; set; } = new();
     public Dictionary<string, int> MonthlyAttendance { get; set; } = new();
 
-    public double OfferingGrowthRate { get; set; }
-
     public int Year { get; set; }
     public int Month { get; set; }
 }
