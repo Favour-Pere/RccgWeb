@@ -31,6 +31,7 @@ namespace RccgWeb
             builder.Services.AddScoped<IAreaService, AreaService>();
             builder.Services.AddScoped<IChurchAdminService, ChurchAdminService>();
             builder.Services.AddScoped<IProgramActivityService, ProgramActivityService>();
+            builder.Services.AddScoped<IChurchService, ChurchService>();
             //builder.Services.AddDefaultIdentity<ApplicationUser>(
             //    options =>
             //    {
