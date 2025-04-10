@@ -20,7 +20,7 @@
                 <td>@zone.ZonePastor</td>
                 <td>@zone.Location</td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@zone.ChurchId" class="btn btn-info">Details</a>
+                    <a asp-controller="Admin" asp-action="ChurchDetails" asp-route-id="@zone.ChurchId" class="btn btn-info">Details</a>
                     <a asp-action="AreasUnderZone" asp-route-id="@zone.ZoneId" class="btn btn-warning">Areas</a>
                     <a asp-action="Delete" asp-route-id="@zone.ZoneId" class="btn btn-danger">Delete</a>
                 </td>
