@@ -20,13 +20,15 @@ namespace RccgWeb.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IChurchAdminService _churchAdminService;
         private readonly IProgramActivityService _programActivityService;
+        private readonly IChurchService _churchService;
 
-        public AdminController(UserManager<ApplicationUser> userManager, ApplicationDbContext context, IChurchAdminService churchAdminService, IProgramActivityService programActivityService)
+        public AdminController(UserManager<ApplicationUser> userManager, ApplicationDbContext context, IChurchAdminService churchAdminService, IProgramActivityService programActivityService, IChurchService churchService)
         {
             _userManager = userManager;
             _context = context;
             _churchAdminService = churchAdminService;
             _programActivityService = programActivityService;
+            _churchService = churchService;
         }
 
         [HttpGet]
@@ -244,10 +246,12 @@ namespace RccgWeb.Controllers
 
             var currentMonth = DateTime.Now.Month;
 
+            var churchName = await _churchService.GetChurchNameAsync(id);
+
             var stats = new ChurchStatsViewModel
             {
                 ChurchId = id,
-                ChurchName = ,
+                ChurchName = churchName ?? "Unknown Church",
                 Year = currentYear,
                 Month = currentMonth,
 
