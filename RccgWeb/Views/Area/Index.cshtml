@@ -20,7 +20,7 @@
                 <td>@area.AreaPastor</td>
                 <td>@area.Location</td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@area.AreaId" class="btn btn-info">Details</a>
+                    <a asp-controller="Admin" asp-action="ChurchDetails" asp-route-id="@area.ChurchId" class="btn btn-info">Details</a>
                     <a asp-action="ParishesUnderArea" asp-route-id="@area.AreaId" class="btn btn-warning">Parishes</a>
                     <a asp-action="Delete" asp-route-id="@area.AreaId" class="btn btn-danger">Delete</a>
                 </td>

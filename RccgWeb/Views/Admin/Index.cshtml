@@ -10,12 +10,13 @@
         <!-- View Zones -->
         <div class="col-md-4">
             <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white">Zones</div>
+                <a class="link-underline link-underline-opacity-0" asp-controller="Zone" asp-action="Index"> <div class="card-header bg-primary text-white">Zone</div></a>
                 <ul class="list-group list-group-flush">
                     @foreach (var zone in Model.Zones)
                     {
-                        <a asp-action="ChurchDetails" asp-route-id="@zone.ChurchId">
-                        <li class="list-group-item">@zone.ZoneName</li></a>
+                        <a class="link-underline link-underline-opacity-0" asp-action="ChurchDetails" asp-route-id="@zone.ChurchId">
+                        <li class="list-group-item">@zone.ZoneName</li>
+                        </a>
                     }
                 </ul>
             </div>
@@ -24,11 +25,13 @@
         <!-- View Areas -->
         <div class="col-md-4">
             <div class="card shadow-sm">
-                <div class="card-header bg-secondary text-white">Areas</div>
+                <a class="link-underline link-underline-opacity-0" asp-controller="Area" asp-action="Index"><div class="card-header bg-secondary text-white">Areas</div></a>
                 <ul class="list-group list-group-flush">
                     @foreach (var area in Model.Areas)
                     {
+                        <a class="link-underline link-underline-opacity-0" asp-action="ChurchDetails" asp-route-id="@area.ChurchId">
                         <li class="list-group-item">@area.AreaName</li>
+                        </a>
                     }
                 </ul>
             </div>
@@ -37,11 +40,13 @@
         <!-- View Parishes -->
         <div class="col-md-4">
             <div class="card shadow-sm">
-                <div class="card-header bg-success text-white">Parishes</div>
+               <a class="link-underline link-underline-opacity-0" asp-controller="Parish" asp-action="Index"><div class="card-header bg-success text-white">Parishes</div></a>
                 <ul class="list-group list-group-flush">
                     @foreach (var parish in Model.Parishes)
                     {
+                        <a class="link-underline link-underline-opacity-0" asp-action="ChurchDetails" asp-route-id="@parish.ChurchId">
                         <li class="list-group-item">@parish.ParishName</li>
+                        </a>
                     }
                 </ul>
             </div>

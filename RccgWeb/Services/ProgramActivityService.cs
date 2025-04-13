@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RccgWeb.Data;
+using RccgWeb.Models;
 using RccgWeb.Services.Interfaces;
 
 namespace RccgWeb.Services
@@ -59,6 +60,28 @@ namespace RccgWeb.Services
                 );
         }
 
+        public async Task<Dictionary<string, decimal>> GetMonthlyTithesBreakdownAsync(string churchId, int year)
+        {
+            var startDate = new DateTime(year, 1, 1);
+            var endDate = new DateTime(year + 1, 1, 1);
+
+            var data = await _context.ProgramActivities
+                .Where(a => a.ChurchId == churchId && a.DateTimeSubmitted >= startDate && a.DateTimeSubmitted < endDate).ToListAsync();
+
+            return data.GroupBy(a => a.DateTimeSubmitted.Month).OrderBy(g => g.Key).ToDictionary(g => new DateTime(year, g.Key, 1).ToString("MMMM"), g => g.Sum(a => a.Tithe));
+        }
+
+        public async Task<Dictionary<string, int>> GetMonthlyAttendanceBreakdownAsync(string churchId, int year)
+        {
+            var startDate = new DateTime(year, 1, 1);
+            var endDate = new DateTime(year + 1, 1, 1);
+
+            var data = await _context.ProgramActivities
+                .Where(a => a.ChurchId == churchId && a.DateTimeSubmitted >= startDate && a.DateTimeSubmitted < endDate).ToListAsync();
+
+            return data.GroupBy(a => a.DateTimeSubmitted.Month).OrderBy(g => g.Key).ToDictionary(g => new DateTime(year, g.Key, 1).ToString("MMMM"), g => g.Sum(a => a.Attendance));
+        }
+
         public async Task<int> GetTotalAttendanceAsync(string churchId)
         {
             return await _context.ProgramActivities.Where(a => a.ChurchId == churchId).SumAsync(a => a.Attendance);
@@ -73,5 +96,29 @@ namespace RccgWeb.Services
         {
             return await _context.ProgramActivities.Where(a => a.ChurchId == churchId).SumAsync(a => a.Tithe);
         }
+
+        public async Task<PaginatedActivitiesResult> GetPaginatedRecentActivitiesAsync(string churchId, int page, int pageSize)
+        {
+            var totalActivities = await _context.ProgramActivities.Where(a => a.ChurchId == churchId).CountAsync();
+
+            var totalPages = (int)Math.Ceiling(totalActivities / (double)pageSize);
+
+            var activities = await _context.ProgramActivities.Where(a => a.ChurchId == churchId).OrderByDescending(a => a.DateTimeSubmitted).Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+
+            return new PaginatedActivitiesResult
+            {
+                Activities = activities,
+                TotalPages = totalPages,
+                CurrentPage = page
+            };
+        }
+    }
+
+    public class PaginatedActivitiesResult
+    {
+        public List<ProgramActivity> Activities { get; set; } = new();
+        public int TotalPages { get; set; }
+
+        public int CurrentPage { get; set; }
     }
 }

@@ -20,13 +20,15 @@ namespace RccgWeb.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IChurchAdminService _churchAdminService;
         private readonly IProgramActivityService _programActivityService;
+        private readonly IChurchService _churchService;
 
-        public AdminController(UserManager<ApplicationUser> userManager, ApplicationDbContext context, IChurchAdminService churchAdminService, IProgramActivityService programActivityService)
+        public AdminController(UserManager<ApplicationUser> userManager, ApplicationDbContext context, IChurchAdminService churchAdminService, IProgramActivityService programActivityService, IChurchService churchService)
         {
             _userManager = userManager;
             _context = context;
             _churchAdminService = churchAdminService;
             _programActivityService = programActivityService;
+            _churchService = churchService;
         }
 
         [HttpGet]
@@ -233,7 +235,7 @@ namespace RccgWeb.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ChurchDetails(string id)
+        public async Task<IActionResult> ChurchDetails(string id, int page = 1)
         {
             if (string.IsNullOrEmpty(id))
             {
@@ -244,14 +246,27 @@ namespace RccgWeb.Controllers
 
             var currentMonth = DateTime.Now.Month;
 
+            var churchName = await _churchService.GetChurchNameAsync(id);
+
+            var pagedResult = await _programActivityService.GetPaginatedRecentActivitiesAsync(id, page, 10);
+            var assignedUser = await _context.UserChurches.Include(uc => uc.User).Where(u => u.ChurchId == id).FirstOrDefaultAsync();
+
             var stats = new ChurchStatsViewModel
             {
                 ChurchId = id,
-                ChurchName = "Test Church",
+                ChurchName = churchName ?? "Unknown Church",
                 Year = currentYear,
                 Month = currentMonth,
 
                 MonthlyOfferings = await _programActivityService.GetMonthlyOfferingBreakdownAsync(id, currentYear),
+                MonthlyTithes = await _programActivityService.GetMonthlyTithesBreakdownAsync(id, currentYear),
+                MonthlyAttendance = await _programActivityService.GetMonthlyAttendanceBreakdownAsync(id, currentYear),
+                RecentActivities = pagedResult.Activities,
+                CurrentPage = pagedResult.CurrentPage,
+                TotalPages = pagedResult.TotalPages,
+                PastorName = assignedUser != null ? $"{assignedUser.User.FirstName} {assignedUser.User.LastName}" : "Not Assigned",
+                PastorEmail = assignedUser?.User.Email ?? "N/A",
+                PastorPhone = assignedUser?.User.PhoneNumber ?? "N/A"
             };
 
             return View(stats); // Return the view with the stats model
