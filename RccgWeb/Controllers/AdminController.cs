@@ -248,7 +248,7 @@ namespace RccgWeb.Controllers
 
             var churchName = await _churchService.GetChurchNameAsync(id);
 
-            var pagedResult = await _programActivityService.GetPaginatedRecentActivitiesAsync(id, page, 10)
+            var pagedResult = await _programActivityService.GetPaginatedRecentActivitiesAsync(id, page, 10);
             var stats = new ChurchStatsViewModel
             {
                 ChurchId = id,
