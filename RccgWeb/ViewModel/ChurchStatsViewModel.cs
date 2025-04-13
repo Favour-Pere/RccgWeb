@@ -1,3 +1,4 @@
+using RccgWeb.Models;
 using System;
 
 namespace RccgWeb.ViewModel;
@@ -13,4 +14,8 @@ public class ChurchStatsViewModel
 
     public int Year { get; set; }
     public int Month { get; set; }
+
+    public List<ProgramActivity> RecentActivities { get; set; } = new();
+    public int CurrentPage { get; set; }
+    public int TotalPages { get; set; }
 }
