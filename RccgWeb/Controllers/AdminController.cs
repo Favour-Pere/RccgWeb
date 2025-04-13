@@ -235,7 +235,7 @@ namespace RccgWeb.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ChurchDetails(string id)
+        public async Task<IActionResult> ChurchDetails(string id, int page = 1)
         {
             if (string.IsNullOrEmpty(id))
             {
@@ -248,6 +248,7 @@ namespace RccgWeb.Controllers
 
             var churchName = await _churchService.GetChurchNameAsync(id);
 
+            var pagedResult = await _programActivityService.GetPaginatedRecentActivitiesAsync(id, page, 10)
             var stats = new ChurchStatsViewModel
             {
                 ChurchId = id,
@@ -257,7 +258,10 @@ namespace RccgWeb.Controllers
 
                 MonthlyOfferings = await _programActivityService.GetMonthlyOfferingBreakdownAsync(id, currentYear),
                 MonthlyTithes = await _programActivityService.GetMonthlyTithesBreakdownAsync(id, currentYear),
-                MonthlyAttendance = await _programActivityService.GetMonthlyAttendanceBreakdownAsync(id, currentYear)
+                MonthlyAttendance = await _programActivityService.GetMonthlyAttendanceBreakdownAsync(id, currentYear),
+                RecentActivities = pagedResult.Activities,
+                CurrentPage = pagedResult.CurrentPage,
+                TotalPages = pagedResult.TotalPages
             };
 
             return View(stats); // Return the view with the stats model
