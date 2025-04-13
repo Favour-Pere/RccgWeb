@@ -6,6 +6,16 @@
 
 <h2>@Model.ChurchName - @Model.Year</h2>
 
+<div class="card mt-3 mb-4 shadow-sm">
+    <div class="card-header bg-success text-white">
+        Pastor Information
+    </div>
+    <div class="card-body">
+        <p><strong>Name:</strong> @Model.PastorName</p>
+        <p><strong>Phone:</strong> @Model.PastorPhone</p>
+        <p><strong>Email:</strong> @Model.PastorEmail</p>
+    </div>
+</div>
 <div class="row">
     <div class="col-md-6">
         <canvas id="offeringChart"></canvas>
