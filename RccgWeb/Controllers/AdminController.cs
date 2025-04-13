@@ -249,6 +249,8 @@ namespace RccgWeb.Controllers
             var churchName = await _churchService.GetChurchNameAsync(id);
 
             var pagedResult = await _programActivityService.GetPaginatedRecentActivitiesAsync(id, page, 10);
+            var assignedUser = await _context.UserChurches.Include(uc => uc.User).Where(u => u.ChurchId == id).FirstOrDefaultAsync();
+
             var stats = new ChurchStatsViewModel
             {
                 ChurchId = id,
@@ -261,7 +263,10 @@ namespace RccgWeb.Controllers
                 MonthlyAttendance = await _programActivityService.GetMonthlyAttendanceBreakdownAsync(id, currentYear),
                 RecentActivities = pagedResult.Activities,
                 CurrentPage = pagedResult.CurrentPage,
-                TotalPages = pagedResult.TotalPages
+                TotalPages = pagedResult.TotalPages,
+                PastorName = assignedUser != null ? $"{assignedUser.User.FirstName} {assignedUser.User.LastName}" : "Not Assigned",
+                PastorEmail = assignedUser?.User.Email ?? "N/A",
+                PastorPhone = assignedUser?.User.PhoneNumber ?? "N/A"
             };
 
             return View(stats); // Return the view with the stats model
