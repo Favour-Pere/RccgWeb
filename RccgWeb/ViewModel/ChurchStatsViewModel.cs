@@ -18,4 +18,9 @@ public class ChurchStatsViewModel
     public List<ProgramActivity> RecentActivities { get; set; } = new();
     public int CurrentPage { get; set; }
     public int TotalPages { get; set; }
+
+    public string PastorName { get; set; } = string.Empty;
+    public string PastorPhone { get; set; } = string.Empty;
+
+    public string PastorEmail { get; set; } = string.Empty;
 }
